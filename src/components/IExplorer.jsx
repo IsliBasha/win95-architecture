@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const HOME_URL = 'home.microsoft.com/ie';
+const LOADING_MS = 600;
 
 function normalizeUrl(raw) {
   return raw
@@ -10,18 +11,26 @@ function normalizeUrl(raw) {
     .replace(/\/$/, '');
 }
 
-function MsnPage() {
+function PageLink({ url, onNavigate, children }) {
+  return (
+    <button type="button" className="ie-page__link" onClick={() => onNavigate(url)}>
+      {children}
+    </button>
+  );
+}
+
+function MsnPage({ onNavigate }) {
   return (
     <div className="ie-page ie-page--msn">
       <div className="ie-page__banner">MSN.COM</div>
       <h2>The Microsoft Network</h2>
       <p>Welcome to MSN — your home on the internet.</p>
       <ul className="ie-page__links">
-        <li>📰 Today's News</li>
-        <li>📧 Hotmail — Free E-Mail</li>
-        <li>🔍 Search the Web</li>
-        <li>💬 Chat with Friends</li>
-        <li>🛒 Shopping Online</li>
+        <li><PageLink url="www.microsoft.com" onNavigate={onNavigate}>📰 Today's News</PageLink></li>
+        <li><PageLink url="mail.msn.com" onNavigate={onNavigate}>📧 Hotmail — Free E-Mail</PageLink></li>
+        <li><PageLink url="www.altavista.com" onNavigate={onNavigate}>🔍 Search the Web</PageLink></li>
+        <li><PageLink url="chat.msn.com" onNavigate={onNavigate}>💬 Chat with Friends</PageLink></li>
+        <li><PageLink url="shopping.msn.com" onNavigate={onNavigate}>🛒 Shopping Online</PageLink></li>
       </ul>
       <hr />
       <p className="ie-page__footer">© 1995 Microsoft Corporation. All rights reserved.</p>
@@ -29,20 +38,18 @@ function MsnPage() {
   );
 }
 
-function MicrosoftPage() {
+function MicrosoftPage({ onNavigate }) {
   return (
     <div className="ie-page ie-page--microsoft">
       <div className="ie-page__banner">MICROSOFT.COM</div>
       <h2>Welcome to Microsoft</h2>
-      <p>
-        Where do you want to go today?
-      </p>
+      <p>Where do you want to go today?</p>
       <ul className="ie-page__links">
-        <li>💾 Download Windows 95</li>
-        <li>📦 Office 95 — Now Available</li>
-        <li>🎮 Microsoft Games</li>
-        <li>🛠 Developer Tools</li>
-        <li>📞 Technical Support</li>
+        <li><PageLink url="download.microsoft.com" onNavigate={onNavigate}>💾 Download Windows 95</PageLink></li>
+        <li><PageLink url="office.microsoft.com" onNavigate={onNavigate}>📦 Office 95 — Now Available</PageLink></li>
+        <li><PageLink url="games.microsoft.com" onNavigate={onNavigate}>🎮 Microsoft Games</PageLink></li>
+        <li><PageLink url="dev.microsoft.com" onNavigate={onNavigate}>🛠 Developer Tools</PageLink></li>
+        <li><PageLink url="support.microsoft.com" onNavigate={onNavigate}>📞 Technical Support</PageLink></li>
       </ul>
       <hr />
       <p className="ie-page__footer">© 1995 Microsoft Corporation</p>
@@ -50,23 +57,23 @@ function MicrosoftPage() {
   );
 }
 
-function YahooPage() {
+function YahooPage({ onNavigate }) {
   return (
     <div className="ie-page ie-page--yahoo">
       <div className="ie-page__banner">YAHOO!</div>
       <h2>Yahoo! — Yet Another Hierarchical Officious Oracle</h2>
       <p>The web's premier directory. Updated daily.</p>
       <ul className="ie-page__links">
-        <li>🎭 Arts</li>
-        <li>💼 Business and Economy</li>
-        <li>🖥 Computers and Internet</li>
-        <li>🎓 Education</li>
-        <li>🎬 Entertainment</li>
-        <li>🏛 Government</li>
-        <li>🏥 Health</li>
-        <li>📰 News and Media</li>
-        <li>🏅 Recreation and Sports</li>
-        <li>🔬 Science</li>
+        <li><PageLink url="arts.yahoo.com" onNavigate={onNavigate}>🎭 Arts</PageLink></li>
+        <li><PageLink url="business.yahoo.com" onNavigate={onNavigate}>💼 Business and Economy</PageLink></li>
+        <li><PageLink url="computers.yahoo.com" onNavigate={onNavigate}>🖥 Computers and Internet</PageLink></li>
+        <li><PageLink url="education.yahoo.com" onNavigate={onNavigate}>🎓 Education</PageLink></li>
+        <li><PageLink url="entertainment.yahoo.com" onNavigate={onNavigate}>🎬 Entertainment</PageLink></li>
+        <li><PageLink url="government.yahoo.com" onNavigate={onNavigate}>🏛 Government</PageLink></li>
+        <li><PageLink url="health.yahoo.com" onNavigate={onNavigate}>🏥 Health</PageLink></li>
+        <li><PageLink url="news.yahoo.com" onNavigate={onNavigate}>📰 News and Media</PageLink></li>
+        <li><PageLink url="sports.yahoo.com" onNavigate={onNavigate}>🏅 Recreation and Sports</PageLink></li>
+        <li><PageLink url="science.yahoo.com" onNavigate={onNavigate}>🔬 Science</PageLink></li>
       </ul>
       <hr />
       <p className="ie-page__footer">© 1995 Yahoo! Inc.</p>
@@ -74,20 +81,18 @@ function YahooPage() {
   );
 }
 
-function NetscapePage() {
+function NetscapePage({ onNavigate }) {
   return (
     <div className="ie-page ie-page--netscape">
       <div className="ie-page__banner">NETSCAPE.COM</div>
       <h2>Netscape Communications</h2>
-      <p>
-        The leading web browser. Download Netscape Navigator 2.0 today!
-      </p>
+      <p>The leading web browser. Download Netscape Navigator 2.0 today!</p>
       <ul className="ie-page__links">
-        <li>⬇ Download Navigator</li>
-        <li>📚 Netcenter</li>
-        <li>🔍 Net Search</li>
-        <li>🗺 Net Directory</li>
-        <li>💬 Netscape Forums</li>
+        <li><PageLink url="download.netscape.com" onNavigate={onNavigate}>⬇ Download Navigator</PageLink></li>
+        <li><PageLink url="netcenter.netscape.com" onNavigate={onNavigate}>📚 Netcenter</PageLink></li>
+        <li><PageLink url="search.netscape.com" onNavigate={onNavigate}>🔍 Net Search</PageLink></li>
+        <li><PageLink url="www.yahoo.com" onNavigate={onNavigate}>🗺 Net Directory</PageLink></li>
+        <li><PageLink url="forums.netscape.com" onNavigate={onNavigate}>💬 Netscape Forums</PageLink></li>
       </ul>
       <hr />
       <p className="ie-page__footer">© 1995 Netscape Communications Corporation</p>
@@ -103,9 +108,7 @@ function GooglePage() {
       <p>
         The page <strong>www.google.com</strong> cannot be displayed.
       </p>
-      <p>
-        This site does not appear to exist yet. Try checking back in 1998.
-      </p>
+      <p>This site does not appear to exist yet. Try checking back in 1998.</p>
       <ul className="ie-page__links">
         <li>• Check that the address is correct</li>
         <li>• The server may be temporarily unavailable</li>
@@ -115,14 +118,30 @@ function GooglePage() {
   );
 }
 
-function AltaVistaPage() {
+function AltaVistaPage({ onNavigate }) {
+  const [query, setQuery] = useState('');
+
+  function handleSearch() {
+    if (query.trim()) onNavigate(`search.altavista.com/search?q=${query}`);
+  }
+
   return (
     <div className="ie-page ie-page--altavista">
       <div className="ie-page__banner">ALTAVISTA.COM</div>
       <h2>AltaVista — Search the Web</h2>
       <p>The most powerful and useful guide to the Net.</p>
-      <div className="ie-page__search-box">
-        [Search: ___________________________] [Search!]
+      <div className="ie-page__search-row">
+        <input
+          className="ie-page__search-input"
+          type="text"
+          aria-label="AltaVista Search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+        />
+        <button type="button" className="win-btn" onClick={handleSearch}>
+          Search!
+        </button>
       </div>
       <p style={{ marginTop: '8px' }}>Indexed over 16 billion words. Updated daily.</p>
       <hr />
@@ -164,23 +183,23 @@ function ErrorPage({ url }) {
 }
 
 const ROUTES = {
-  'home.microsoft.com/ie': () => <MsnPage />,
-  'www.microsoft.com': () => <MicrosoftPage />,
-  'microsoft.com': () => <MicrosoftPage />,
-  'www.yahoo.com': () => <YahooPage />,
-  'yahoo.com': () => <YahooPage />,
-  'www.netscape.com': () => <NetscapePage />,
-  'netscape.com': () => <NetscapePage />,
+  'home.microsoft.com/ie': (nav) => <MsnPage onNavigate={nav} />,
+  'www.microsoft.com': (nav) => <MicrosoftPage onNavigate={nav} />,
+  'microsoft.com': (nav) => <MicrosoftPage onNavigate={nav} />,
+  'www.yahoo.com': (nav) => <YahooPage onNavigate={nav} />,
+  'yahoo.com': (nav) => <YahooPage onNavigate={nav} />,
+  'www.netscape.com': (nav) => <NetscapePage onNavigate={nav} />,
+  'netscape.com': (nav) => <NetscapePage onNavigate={nav} />,
   'www.google.com': () => <GooglePage />,
   'google.com': () => <GooglePage />,
-  'www.altavista.com': () => <AltaVistaPage />,
-  'altavista.com': () => <AltaVistaPage />,
+  'www.altavista.com': (nav) => <AltaVistaPage onNavigate={nav} />,
+  'altavista.com': (nav) => <AltaVistaPage onNavigate={nav} />,
 };
 
-function resolvePage(url) {
+function resolvePage(url, onNavigate) {
   const norm = normalizeUrl(url);
   const factory = ROUTES[norm];
-  return factory ? factory() : <ErrorPage url={norm} />;
+  return factory ? factory(onNavigate) : <ErrorPage url={norm} />;
 }
 
 const MENU_ITEMS = ['File', 'Edit', 'View', 'Go', 'Favorites', 'Help'];
@@ -189,10 +208,20 @@ export function IExplorer() {
   const [history, setHistory] = useState([HOME_URL]);
   const [historyIdx, setHistoryIdx] = useState(0);
   const [addressInput, setAddressInput] = useState(HOME_URL);
+  const [status, setStatus] = useState('Done');
+  const timerRef = useRef(null);
 
   const currentUrl = history[historyIdx];
   const canGoBack = historyIdx > 0;
   const canGoForward = historyIdx < history.length - 1;
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current); }, []);
+
+  const startLoading = useCallback(() => {
+    setStatus('Opening page...');
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => setStatus('Done'), LOADING_MS);
+  }, []);
 
   const navigate = useCallback(
     (raw) => {
@@ -201,8 +230,9 @@ export function IExplorer() {
       setHistory(newHistory);
       setHistoryIdx(newHistory.length - 1);
       setAddressInput(url);
+      startLoading();
     },
-    [history, historyIdx],
+    [history, historyIdx, startLoading],
   );
 
   const goBack = useCallback(() => {
@@ -210,23 +240,21 @@ export function IExplorer() {
     const idx = historyIdx - 1;
     setHistoryIdx(idx);
     setAddressInput(history[idx]);
-  }, [canGoBack, history, historyIdx]);
+    startLoading();
+  }, [canGoBack, history, historyIdx, startLoading]);
 
   const goForward = useCallback(() => {
     if (!canGoForward) return;
     const idx = historyIdx + 1;
     setHistoryIdx(idx);
     setAddressInput(history[idx]);
-  }, [canGoForward, history, historyIdx]);
+    startLoading();
+  }, [canGoForward, history, historyIdx, startLoading]);
 
-  const goHome = useCallback(() => {
-    navigate(HOME_URL);
-  }, [navigate]);
+  const goHome = useCallback(() => navigate(HOME_URL), [navigate]);
 
   const handleAddressKey = useCallback(
-    (e) => {
-      if (e.key === 'Enter') navigate(addressInput);
-    },
+    (e) => { if (e.key === 'Enter') navigate(addressInput); },
     [addressInput, navigate],
   );
 
@@ -308,11 +336,11 @@ export function IExplorer() {
       </div>
 
       <main className="ie-content" aria-label="Browser content">
-        {resolvePage(currentUrl)}
+        {resolvePage(currentUrl, navigate)}
       </main>
 
       <div className="explorer-statusbar" role="status">
-        Done
+        {status}
       </div>
     </>
   );

@@ -2192,6 +2192,36 @@ textarea.win-field {
   display: inline-block;
 }
 
+.ie-page__link {
+  background: none;
+  border: none;
+  color: #0000cc;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.ie-page__link:hover {
+  color: #cc0000;
+}
+
+.ie-page__search-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.ie-page__search-input {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border: 2px inset #808080;
+  padding: 1px 4px;
+  width: 220px;
+}
+
 .ie-page--error h2 {
   color: #cc0000;
 }
