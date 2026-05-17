@@ -116,6 +116,20 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
+  if (kind === 'notes') {
+    return (
+      <svg {...props}>
+        <rect x="5" y="3" width="18" height="22" fill="#ffffcc" stroke="#000000" />
+        <rect x="5" y="3" width="18" height="3" fill="#ffcc00" stroke="#000000" />
+        <rect x="8" y="10" width="12" height="1" fill="#808080" />
+        <rect x="8" y="13" width="12" height="1" fill="#808080" />
+        <rect x="8" y="16" width="8"  height="1" fill="#808080" />
+        <rect x="8" y="19" width="10" height="1" fill="#808080" />
+        <rect x="25" y="2" width="5" height="6" fill="#c0c0c0" stroke="#000000" />
+        <rect x="27" y="4" width="1" height="10" fill="#808080" />
+      </svg>
+    );
+  }
   if (kind === 'paint') {
     return (
       <svg {...props}>

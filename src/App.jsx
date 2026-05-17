@@ -15,6 +15,7 @@ import { ContextMenu } from './components/ContextMenu.jsx';
 import { NotepadAbout } from './components/NotepadAbout.jsx';
 import { ContactExe } from './components/ContactExe.jsx';
 import { IExplorer } from './components/IExplorer.jsx';
+import { Notes } from './components/Notes.jsx';
 import { ReadmeViewer } from './components/ReadmeViewer.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
@@ -29,6 +30,7 @@ const WINDOW_ORDER = [
   'snake',
   'paint',
   'ie',
+  'notes',
 ];
 const INITIALLY_CLOSED = [
   'about',
@@ -40,6 +42,7 @@ const INITIALLY_CLOSED = [
   'snake',
   'paint',
   'ie',
+  'notes',
 ];
 
 const ICONS = [
@@ -52,6 +55,7 @@ const ICONS = [
   { kind: 'snake',       label: 'snake.exe',        target: 'snake'       },
   { kind: 'paint',       label: 'paint.exe',        target: 'paint'       },
   { kind: 'ie',          label: 'iexplore.exe',     target: 'ie'          },
+  { kind: 'notes',       label: 'notes.exe',        target: 'notes'       },
 ];
 
 const ICON_H = 80;
@@ -242,6 +246,16 @@ function App() {
           contentClassName="win-ie__content"
         >
           <IExplorer />
+        </Window>
+
+        <Window
+          id="notes"
+          title="notes.exe"
+          className="win-notes"
+          bootDelayMs={0}
+          contentClassName="win-notes__content"
+        >
+          <Notes />
         </Window>
       </main>
       <Taskbar />

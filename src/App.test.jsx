@@ -62,7 +62,7 @@ describe('App initial desktop state', () => {
       screen.queryByRole('region', { name: 'stack.cmd' }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('region', { name: 'contact.exe' }),
+      screen.queryByRole('region', { name: 'email.exe' }),
     ).not.toBeInTheDocument();
   });
 
@@ -124,7 +124,7 @@ describe('Menu bar items — decorative only', () => {
   it('clicking a menu item in the contact window does not open a dialog', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'contact.exe' }));
+    await user.click(screen.getByRole('button', { name: 'email.exe' }));
     const [first] = screen.getAllByRole('menuitem');
     await user.click(first);
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
