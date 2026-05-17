@@ -104,5 +104,21 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
+  if (kind === 'paint') {
+    return (
+      <svg {...props}>
+        <rect x="2" y="4" width="22" height="18" fill="#ffffff" stroke="#000000" />
+        <rect x="2" y="4" width="22" height="3" fill="#c0c0c0" stroke="#000000" />
+        <rect x="5" y="10" width="5" height="5" fill="#ff0000" />
+        <rect x="12" y="10" width="5" height="5" fill="#0000ff" />
+        <rect x="5" y="16" width="5" height="3" fill="#00ff00" />
+        <rect x="12" y="16" width="5" height="3" fill="#ffff00" />
+        <rect x="25" y="4" width="5" height="18" fill="#c0c0c0" stroke="#000000" />
+        <rect x="27" y="6" width="1" height="14" fill="#808080" />
+        <rect x="24" y="2" width="7" height="3" fill="#808080" />
+        <rect x="26" y="0" width="3" height="3" fill="#ffd700" />
+      </svg>
+    );
+  }
   return null;
 }

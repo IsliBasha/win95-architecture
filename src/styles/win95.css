@@ -1763,3 +1763,131 @@ textarea.win-field {
     --tilt: 0.3deg;
   }
 }
+
+/* ============================================================
+   Paint
+   ============================================================ */
+
+.win-paint__content {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  user-select: none;
+}
+
+.paint-workspace {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 0;
+  border-bottom: 1px solid #808080;
+}
+
+.paint-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  border-right: 1px solid #808080;
+  background: #c0c0c0;
+}
+
+.paint-tool-btn {
+  width: 28px;
+  height: 28px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paint-tool-btn--active {
+  box-shadow: inset 1px 1px 0 #808080, inset -1px -1px 0 #ffffff;
+  background: #b0b0b0;
+}
+
+.paint-canvas-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 4px;
+  overflow: auto;
+  background: #808080;
+}
+
+.paint-canvas {
+  display: block;
+  cursor: crosshair;
+  box-shadow: 1px 1px 0 #000000;
+}
+
+.paint-bottom {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 4px;
+  background: #c0c0c0;
+  border-top: 1px solid #ffffff;
+}
+
+.paint-active-color-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.paint-color-fg {
+  width: 20px;
+  height: 20px;
+  border: 2px inset #808080;
+  box-shadow: 1px 1px 0 #000000;
+  flex-shrink: 0;
+}
+
+.paint-clear-btn {
+  font-size: 0.7rem;
+  padding: 1px 4px;
+}
+
+.paint-palette {
+  display: flex;
+  flex-wrap: wrap;
+  width: 224px;
+}
+
+.paint-swatch {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #808080;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.paint-swatch--active {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 2px #000000;
+}
+
+.paint-coords {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  min-width: 60px;
+  text-align: right;
+  border: 1px inset #808080;
+  padding: 1px 4px;
+  background: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .win-paint {
+    top: 8%;
+    left: 18%;
+    --tilt: -0.8deg;
+  }
+}

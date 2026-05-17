@@ -140,6 +140,20 @@ describe('Menu bar items — decorative only', () => {
   });
 });
 
+describe('Desktop icon — paint.exe', () => {
+  it('renders a paint.exe icon on the desktop', () => {
+    render(<App />);
+    expect(screen.getByRole('button', { name: 'paint.exe' })).toBeInTheDocument();
+  });
+
+  it('opens the paint window when the paint.exe icon is clicked', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole('button', { name: 'paint.exe' }));
+    expect(screen.getByRole('region', { name: /paint\.exe/i })).toBeInTheDocument();
+  });
+});
+
 describe('Desktop icon — readme.txt opens window', () => {
   it('readme.txt icon is a button (not a link) and opens the readme window', async () => {
     const user = userEvent.setup();

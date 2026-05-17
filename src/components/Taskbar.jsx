@@ -10,6 +10,7 @@ const MENU_ITEMS = [
   { id: 'stack', label: 'Stack', icon: 'term' },
   { id: 'contact', label: 'Contact', icon: 'mail' },
   { id: 'stats', label: 'SiteCounter', icon: 'stats' },
+  { id: 'paint', label: 'Paint', icon: 'paint' },
 ];
 
 function StartIcon() {
@@ -72,6 +73,17 @@ function MenuGlyph({ kind }) {
         <rect x="7" y="9" width="2" height="7" fill="#000080" />
         <rect x="11" y="6" width="2" height="10" fill="#000080" />
         <rect x="2" y="15" width="14" height="1" fill="#808080" />
+      </svg>
+    );
+  }
+  if (kind === 'paint') {
+    return (
+      <svg viewBox="0 0 18 18" shapeRendering="crispEdges" aria-hidden="true">
+        <rect x="1" y="3" width="13" height="11" fill="#ffffff" stroke="#000000" />
+        <rect x="1" y="3" width="13" height="2" fill="#c0c0c0" stroke="#000000" />
+        <rect x="3" y="7" width="3" height="3" fill="#ff0000" />
+        <rect x="8" y="7" width="3" height="3" fill="#0000ff" />
+        <rect x="15" y="3" width="2" height="11" fill="#c0c0c0" stroke="#000000" />
       </svg>
     );
   }

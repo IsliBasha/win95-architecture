@@ -5,7 +5,7 @@ import { Taskbar } from './components/Taskbar.jsx';
 import { DesktopIcon } from './components/DesktopIcon.jsx';
 import { ProjectCard } from './components/ProjectCard.jsx';
 import { StackCmd } from './components/StackCmd.jsx';
-import { StickyNote } from './components/StickyNote.jsx';
+import { Paint } from './components/Paint.jsx';
 import { Minesweeper } from './components/Minesweeper.jsx';
 import { Snake } from './components/Snake.jsx';
 import { BSOD } from './components/BSOD.jsx';
@@ -28,6 +28,7 @@ const WINDOW_ORDER = [
   'readme',
   'minesweeper',
   'snake',
+  'paint',
 ];
 const INITIALLY_CLOSED = [
   'about',
@@ -37,6 +38,7 @@ const INITIALLY_CLOSED = [
   'readme',
   'minesweeper',
   'snake',
+  'paint',
 ];
 
 function ProjectsExplorer({ projects: projectList }) {
@@ -122,10 +124,7 @@ function App() {
           <DesktopIcon kind="resume"      label="readme.txt"      target="readme"      defaultPos={{ x: 16, y: 336 }} />
           <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 416 }} />
           <DesktopIcon kind="snake"       label="snake.exe"       target="snake"       defaultPos={{ x: 16, y: 496 }} />
-        </div>
-
-        <div className="sticky-note-wrap">
-          <StickyNote />
+          <DesktopIcon kind="paint"       label="paint.exe"       target="paint"       defaultPos={{ x: 16, y: 576 }} />
         </div>
 
         <Window
@@ -206,6 +205,16 @@ function App() {
           contentClassName="win-snake__content"
         >
           <Snake />
+        </Window>
+
+        <Window
+          id="paint"
+          title="paint.exe"
+          className="win-paint"
+          bootDelayMs={0}
+          contentClassName="win-paint__content"
+        >
+          <Paint />
         </Window>
       </main>
       <Taskbar />
