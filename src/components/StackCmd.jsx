@@ -1,36 +1,102 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { SystemDialog } from './SystemDialog.jsx';
 
-const ROOT = 'C:\\ISLI\\STACK';
+const FS = {
+  '': {
+    dirs: ['WINDOWS', 'PROGRA~1', 'TEMP'],
+    files: ['AUTOEXEC.BAT', 'CONFIG.SYS', 'IO.SYS', 'MSDOS.SYS'],
+  },
+  'WINDOWS': {
+    dirs: ['SYSTEM', 'FONTS', 'TEMP', 'MEDIA'],
+    files: ['EXPLORER.EXE', 'NOTEPAD.EXE', 'REGEDIT.EXE', 'WIN.INI', 'SYSTEM.INI'],
+  },
+  'WINDOWS\\SYSTEM': {
+    dirs: [],
+    files: ['KERNEL32.DLL', 'USER32.DLL', 'GDI32.DLL', 'SHELL32.DLL'],
+  },
+  'WINDOWS\\FONTS': {
+    dirs: [],
+    files: ['ARIAL.TTF', 'TIMES.TTF', 'COURIER.TTF', 'COMIC.TTF'],
+  },
+  'WINDOWS\\TEMP': { dirs: [], files: [] },
+  'WINDOWS\\MEDIA': {
+    dirs: [],
+    files: ['CHIMES.WAV', 'CHORD.WAV', 'DING.WAV', 'TADA.WAV'],
+  },
+  'PROGRA~1': {
+    dirs: ['ACCESSORI', 'INTERNET'],
+    files: [],
+  },
+  'PROGRA~1\\ACCESSORI': {
+    dirs: [],
+    files: ['CALC.EXE', 'MSPAINT.EXE', 'WORDPAD.EXE'],
+  },
+  'PROGRA~1\\INTERNET': {
+    dirs: [],
+    files: ['IEXPLORE.EXE'],
+  },
+  'TEMP': { dirs: [], files: [] },
+};
 
-const DIRS = {
-  '':         { subdirs: ['languages', 'frontend', 'backend', 'infra'], files: [] },
-  languages:  { subdirs: [], files: ['TypeScript', 'Go', 'Rust', 'Python'] },
-  frontend:   { subdirs: [], files: ['React / Next.js', 'Svelte / SvelteKit', 'Tailwind CSS', 'Three.js'] },
-  backend:    { subdirs: [], files: ['Node.js', 'Fiber (Go)', 'Hono', 'tRPC / GraphQL'] },
-  infra:      { subdirs: [], files: ['Docker', 'Vercel / Cloudflare Workers', 'Turso / PostgreSQL / Redis', 'GitHub Actions'] },
+const FILE_CONTENT = {
+  'AUTOEXEC.BAT': [
+    '@ECHO OFF',
+    'PATH C:\\WINDOWS;C:\\WINDOWS\\COMMAND',
+    'PROMPT $p$g',
+    'SET TEMP=C:\\TEMP',
+    'SET TMP=C:\\TEMP',
+  ].join('\r\n'),
+  'CONFIG.SYS': [
+    'DEVICE=C:\\WINDOWS\\HIMEM.SYS',
+    'DEVICE=C:\\WINDOWS\\EMM386.EXE NOEMS',
+    'BUFFERS=40',
+    'FILES=80',
+    'DOS=HIGH,UMB',
+    'LASTDRIVE=E',
+  ].join('\r\n'),
+  'WIN.INI': [
+    '[windows]',
+    'load=',
+    'run=',
+    'Beep=yes',
+    'NullPort=None',
+    '[Desktop]',
+    'Wallpaper=(None)',
+    'TileWallpaper=0',
+  ].join('\r\n'),
 };
 
 function getPrompt(cwd) {
-  return cwd ? `${ROOT}\\${cwd.toUpperCase()}>` : `${ROOT}>`;
+  return cwd ? `C:\\${cwd}>` : 'C:\\>';
 }
 
 function dirOutput(cwd) {
-  const dir = DIRS[cwd] ?? DIRS[''];
-  const path = cwd ? `${ROOT}\\${cwd.toUpperCase()}` : ROOT;
+  const entry = FS[cwd] ?? { dirs: [], files: [] };
+  const path = cwd ? `C:\\${cwd}` : 'C:\\';
   return [
-    ' Volume in drive C is ISLI',
-    ' Volume Serial Number is 1997-0824',
-    '',
+    ` Volume in drive C is WIN95`,
+    ` Volume Serial Number is 1995-0814`,
+    ``,
     ` Directory of ${path}`,
-    '',
-    '.                   <DIR>',
-    '..                  <DIR>',
-    ...dir.subdirs.map((d) => `${d.toUpperCase().padEnd(20)}<DIR>`),
-    ...dir.files,
-    '',
-    `        ${dir.subdirs.length} Dir(s)  ${dir.files.length} File(s)`,
+    ``,
+    `.                    <DIR>`,
+    `..                   <DIR>`,
+    ...entry.dirs.map((d) => `${d.padEnd(21)}<DIR>`),
+    ...entry.files,
+    ``,
+    `       ${entry.dirs.length + 2} Dir(s)   ${entry.files.length} File(s)`,
   ].join('\n');
+}
+
+function treeOutput(cwd, indent = '') {
+  const entry = FS[cwd] ?? { dirs: [], files: [] };
+  const lines = [];
+  entry.dirs.forEach((d, i) => {
+    const isLast = i === entry.dirs.length - 1 && entry.files.length === 0;
+    lines.push(`${indent}${isLast ? '└───' : '├───'}${d}`);
+    const childKey = cwd ? `${cwd}\\${d}` : d;
+    lines.push(...treeOutput(childKey, indent + (isLast ? '    ' : '│   ')));
+  });
+  return lines;
 }
 
 function processCommand(raw, cwd) {
@@ -44,14 +110,20 @@ function processCommand(raw, cwd) {
     case 'cls':
       return { clear: true };
 
+    case 'ver':
+      return { output: '\nMicrosoft(R) Windows 95\n   (C)Copyright Microsoft Corp 1981-1995.\n' };
+
     case 'dir':
       return { output: dirOutput(cwd) };
 
     case 'cd': {
       if (!arg || arg === '\\' || arg === '/') return { output: '', newCwd: '' };
-      if (arg === '..') return { output: '', newCwd: '' };
-      const target = arg.toLowerCase().replace(/\\/g, '');
-      if (DIRS[target]) return { output: '', newCwd: target };
+      if (arg === '..') {
+        const parent = cwd.includes('\\') ? cwd.slice(0, cwd.lastIndexOf('\\')) : '';
+        return { output: '', newCwd: parent };
+      }
+      const target = cwd ? `${cwd}\\${arg.toUpperCase()}` : arg.toUpperCase();
+      if (target in FS) return { output: '', newCwd: target };
       return { output: 'The system cannot find the path specified.' };
     }
 
@@ -62,39 +134,68 @@ function processCommand(raw, cwd) {
           '',
           'CD       Displays the name of or changes the current directory.',
           'CLS      Clears the screen.',
-          'DIR      Displays a list of files and subdirectories.',
-          'ECHO     Displays messages.',
-          'HELP     Provides Help information for commands.',
+          'DATE     Displays or sets the date.',
+          'DIR      Displays a list of files and subdirectories in a directory.',
+          'ECHO     Displays messages, or turns command-echoing on or off.',
+          'HELP     Provides Help information for Windows commands.',
+          'MEM      Displays the amount of used and free memory.',
+          'TIME     Displays or sets the system time.',
+          'TREE     Graphically displays the folder structure.',
           'TYPE     Displays the contents of a text file.',
           'VER      Displays the Windows version.',
         ].join('\n'),
       };
 
-    case 'ver':
-      return { output: '\nMicrosoft(R) Windows 95\n   (C)Copyright Microsoft Corp 1981-1995.\n' };
-
     case 'echo':
       return { output: arg || '' };
 
+    case 'date': {
+      const d = new Date();
+      const day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getDay()];
+      return {
+        output: `Current date is ${day} ${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}-${d.getFullYear()}`,
+      };
+    }
+
+    case 'time': {
+      const t = new Date();
+      return {
+        output: `Current time is ${String(t.getHours()).padStart(2, '0')}:${String(t.getMinutes()).padStart(2, '0')}:${String(t.getSeconds()).padStart(2, '0')}.${String(t.getMilliseconds()).padStart(2, '0').slice(0, 2)}`,
+      };
+    }
+
+    case 'mem':
+      return {
+        output: [
+          '',
+          'Memory Type        Total     Used    Free',
+          '--------------  --------  ------  ------',
+          'Conventional         640K    121K    519K',
+          'Upper                 63K     55K      8K',
+          'Extended (XMS)    64,512K     0K  64,512K',
+          '--------------  --------  ------  ------',
+          'Total memory      65,215K    176K  65,039K',
+          '',
+          'Largest executable program size    519K (531,424 bytes)',
+          'MS-DOS is resident in the high memory area.',
+        ].join('\n'),
+      };
+
+    case 'tree': {
+      const path = cwd ? `C:\\${cwd}` : 'C:\\';
+      return {
+        output: [
+          `Folder PATH listing for volume WIN95`,
+          `Volume serial number is 1995-0814`,
+          `${path}`,
+          ...treeOutput(cwd),
+        ].join('\n'),
+      };
+    }
+
     case 'type': {
-      const file = arg.toLowerCase().replace(/\.txt$/, '');
-      if (file === 'readme') {
-        return {
-          output: [
-            '',
-            'ISLI BASHA',
-            'Full-Stack Developer -- Tirana, Albania',
-            '',
-            'Builds software end-to-end, from database schema to pixel on screen.',
-            'Focused on caching, indexing, bundle size, and render cost.',
-            'Currently digging into edge computing and WebAssembly.',
-            '',
-            'Email   : islibasha1@gmail.com',
-            'GitHub  : github.com/IsliBasha',
-            '',
-          ].join('\n'),
-        };
-      }
+      const name = arg.toUpperCase();
+      if (name in FILE_CONTENT) return { output: FILE_CONTENT[name] };
       return { output: `File not found - ${arg || '(none)'}` };
     }
 
@@ -109,9 +210,6 @@ const INITIAL_LINES = [
   'Microsoft(R) Windows 95',
   '   (C)Copyright Microsoft Corp 1981-1995.',
   '',
-  `${ROOT}> dir`,
-  ...dirOutput('').split('\n'),
-  '',
 ];
 
 export function StackCmd() {
@@ -120,7 +218,6 @@ export function StackCmd() {
   const [cwd, setCwd] = useState('');
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
-  const [menuOpen, setMenuOpen] = useState(null);
 
   const outputRef = useRef(null);
   const inputRef = useRef(null);
@@ -183,7 +280,6 @@ export function StackCmd() {
             type="button"
             className="explorer-menu-item"
             role="menuitem"
-            onClick={() => setMenuOpen(item)}
           >
             {item}
           </button>
@@ -199,7 +295,7 @@ export function StackCmd() {
       >
         {lines.map((line, i) => (
           <div key={i} className="stack-cmd__line">
-            {line || ' '}
+            {line || ' '}
           </div>
         ))}
         <div className="stack-cmd__prompt-row">
@@ -221,12 +317,6 @@ export function StackCmd() {
           />
         </div>
       </div>
-      <SystemDialog
-        open={menuOpen !== null}
-        title={menuOpen ?? 'Menu'}
-        message="This feature is not implemented."
-        onClose={() => setMenuOpen(null)}
-      />
     </>
   );
 }
