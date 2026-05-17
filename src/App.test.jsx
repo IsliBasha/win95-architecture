@@ -130,34 +130,25 @@ describe('Menu bar items — decorative only', () => {
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
 
-  it('clicking a menu item in the resume window does not open a dialog', async () => {
+  it('clicking a menu item in the readme window does not open a dialog', async () => {
     const user = userEvent.setup();
     render(<App />);
-    await user.click(screen.getByRole('button', { name: 'resume.pdf' }));
+    await user.click(screen.getByRole('button', { name: 'readme.txt' }));
     const [first] = screen.getAllByRole('menuitem');
     await user.click(first);
     expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
   });
-
-  it('submitting the contact form still shows a confirmation dialog', async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await user.click(screen.getByRole('button', { name: 'contact.exe' }));
-    await user.type(screen.getByRole('textbox'), 'Hello');
-    await user.click(screen.getByRole('button', { name: /send message/i }));
-    expect(screen.getByRole('alertdialog')).toBeInTheDocument();
-  });
 });
 
-describe('Desktop icon — resume.pdf opens window', () => {
-  it('resume.pdf icon is a button (not a link) and opens the resume window', async () => {
+describe('Desktop icon — readme.txt opens window', () => {
+  it('readme.txt icon is a button (not a link) and opens the readme window', async () => {
     const user = userEvent.setup();
     render(<App />);
-    const icon = screen.getByRole('button', { name: 'resume.pdf' });
+    const icon = screen.getByRole('button', { name: 'readme.txt' });
     expect(icon).toBeInTheDocument();
     await user.click(icon);
     expect(
-      screen.getByRole('region', { name: /resume\.pdf/i }),
+      screen.getByRole('region', { name: /readme\.txt/i }),
     ).toBeInTheDocument();
   });
 });

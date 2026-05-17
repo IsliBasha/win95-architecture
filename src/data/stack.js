@@ -1,26 +1,21 @@
-export const stackTree = `C:\\ISLI\\STACK
+export const stackTree = `C:\\WIN95\\STACK
 |
-|-- languages/
-|   |-- TypeScript
-|   |-- Go
-|   |-- Rust
-|   |-- Python
+|-- ui/
+|   |-- React 19
+|   |-- Vite 6
+|   |-- Tailwind CSS v4
 |
-|-- frontend/
-|   |-- React / Next.js
-|   |-- Svelte / SvelteKit
-|   |-- Tailwind CSS
-|   |-- Three.js
+|-- styling/
+|   |-- CSS Custom Properties
+|   |-- CSS Animations / Keyframes
+|   |-- IBM Plex Mono / Sans
 |
-|-- backend/
-|   |-- Node.js
-|   |-- Fiber (Go)
-|   |-- Hono
-|   |-- tRPC / GraphQL
+|-- testing/
+|   |-- Vitest
+|   |-- Testing Library
+|   |-- jsdom
 |
-|-- infra/
-|   |-- Docker
-|   |-- Vercel / Cloudflare Workers
-|   |-- Turso / PostgreSQL / Redis
+|-- deployment/
+|   |-- Vercel
 |   |-- GitHub Actions
 `;
