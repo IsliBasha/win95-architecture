@@ -9,7 +9,6 @@ const MENU_ITEMS = [
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'stack', label: 'Stack', icon: 'term' },
   { id: 'contact', label: 'Contact', icon: 'mail' },
-  { id: 'stats', label: 'SiteCounter', icon: 'stats' },
   { id: 'paint', label: 'Paint', icon: 'paint' },
 ];
 

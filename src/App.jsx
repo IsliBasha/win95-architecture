@@ -12,7 +12,6 @@ import { BSOD } from './components/BSOD.jsx';
 import { BootSequence } from './components/BootSequence.jsx';
 import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
-import { VisitorCounterContent } from './components/VisitorCounter.jsx';
 import { NotepadAbout } from './components/NotepadAbout.jsx';
 import { ContactExe } from './components/ContactExe.jsx';
 import { ReadmeViewer } from './components/ReadmeViewer.jsx';
@@ -24,7 +23,6 @@ const WINDOW_ORDER = [
   'projects',
   'stack',
   'contact',
-  'stats',
   'readme',
   'minesweeper',
   'snake',
@@ -40,6 +38,30 @@ const INITIALLY_CLOSED = [
   'snake',
   'paint',
 ];
+
+const ICONS = [
+  { kind: 'about',       label: 'about.txt',       target: 'about'       },
+  { kind: 'projects',    label: 'projects',         target: 'projects'    },
+  { kind: 'stack',       label: 'stack.cmd',        target: 'stack'       },
+  { kind: 'contact',     label: 'contact.exe',      target: 'contact'     },
+  { kind: 'resume',      label: 'readme.txt',       target: 'readme'      },
+  { kind: 'minesweeper', label: 'minesweeper.exe',  target: 'minesweeper' },
+  { kind: 'snake',       label: 'snake.exe',        target: 'snake'       },
+  { kind: 'paint',       label: 'paint.exe',        target: 'paint'       },
+];
+
+const ICON_H = 80;
+const ICON_COL_W = 80;
+const ICON_MARGIN = 16;
+
+function iconPos(index) {
+  const viewH = typeof window !== 'undefined' ? (window.innerHeight || 800) : 800;
+  const perCol = Math.max(1, Math.floor((viewH - 40 - ICON_MARGIN) / ICON_H));
+  return {
+    x: ICON_MARGIN + Math.floor(index / perCol) * ICON_COL_W,
+    y: ICON_MARGIN + (index % perCol) * ICON_H,
+  };
+}
 
 function ProjectsExplorer({ projects: projectList }) {
   return (
@@ -117,14 +139,15 @@ function App() {
       </a>
       <main className="desktop-area" onContextMenu={handleContextMenu}>
         <div className="desktop-icons" aria-label="Desktop shortcuts">
-          <DesktopIcon kind="about"       label="about.txt"       target="about"       defaultPos={{ x: 16, y: 16  }} />
-          <DesktopIcon kind="projects"    label="projects"        target="projects"    defaultPos={{ x: 16, y: 96  }} />
-          <DesktopIcon kind="stack"       label="stack.cmd"       target="stack"       defaultPos={{ x: 16, y: 176 }} />
-          <DesktopIcon kind="contact"     label="contact.exe"     target="contact"     defaultPos={{ x: 16, y: 256 }} />
-          <DesktopIcon kind="resume"      label="readme.txt"      target="readme"      defaultPos={{ x: 16, y: 336 }} />
-          <DesktopIcon kind="minesweeper" label="minesweeper.exe" target="minesweeper" defaultPos={{ x: 16, y: 416 }} />
-          <DesktopIcon kind="snake"       label="snake.exe"       target="snake"       defaultPos={{ x: 16, y: 496 }} />
-          <DesktopIcon kind="paint"       label="paint.exe"       target="paint"       defaultPos={{ x: 16, y: 576 }} />
+          {ICONS.map(({ kind, label, target }, i) => (
+            <DesktopIcon
+              key={target}
+              kind={kind}
+              label={label}
+              target={target}
+              defaultPos={iconPos(i)}
+            />
+          ))}
         </div>
 
         <Window
@@ -165,16 +188,6 @@ function App() {
           contentClassName="win-contact__content"
         >
           <ContactExe />
-        </Window>
-
-        <Window
-          id="stats"
-          title="SiteCounter.exe"
-          className="win-stats"
-          bootDelayMs={0}
-          contentClassName="win-stats__content"
-        >
-          <VisitorCounterContent />
         </Window>
 
         <Window
