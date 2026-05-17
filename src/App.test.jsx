@@ -1,7 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App.jsx';
+
+afterEach(() => {
+  window.location.hash = '';
+});
 
 describe('App game desktop icons', () => {
   it('shows minesweeper and snake icons on the desktop', () => {
@@ -53,9 +57,6 @@ describe('App initial desktop state', () => {
   it('does not render any of the content windows on load', () => {
     render(<App />);
     expect(
-      screen.queryByRole('region', { name: 'about.txt' }),
-    ).not.toBeInTheDocument();
-    expect(
       screen.queryByRole('region', { name: 'projects' }),
     ).not.toBeInTheDocument();
     expect(
@@ -73,15 +74,6 @@ describe('App initial desktop state', () => {
     ).toBeInTheDocument();
   });
 
-  it('opens the about window only after the about.txt icon is clicked', async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await user.click(screen.getByRole('button', { name: 'about.txt' }));
-    expect(
-      screen.getByRole('region', { name: 'about.txt' }),
-    ).toBeInTheDocument();
-  });
-
   it('opens the stack window only after the stack.cmd icon is clicked', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -93,25 +85,15 @@ describe('App initial desktop state', () => {
 });
 
 describe('App desktop labels', () => {
-  it('labels desktop icons with the rebranded filenames', () => {
+  it('labels desktop icons with the correct filenames', () => {
     render(<App />);
-    expect(screen.getByRole('button', { name: 'about.txt' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'projects' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'about.exe' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'stack.cmd' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'projects.exe' })).not.toBeInTheDocument();
   });
 });
 
 describe('Menu bar items — decorative only', () => {
-  it('clicking a menu item in the about window does not open a dialog', async () => {
-    const user = userEvent.setup();
-    render(<App />);
-    await user.click(screen.getByRole('button', { name: 'about.txt' }));
-    const [first] = screen.getAllByRole('menuitem');
-    await user.click(first);
-    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
-  });
-
   it('clicking a menu item in the projects window does not open a dialog', async () => {
     const user = userEvent.setup();
     render(<App />);

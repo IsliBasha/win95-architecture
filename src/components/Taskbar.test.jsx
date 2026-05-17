@@ -127,14 +127,14 @@ describe('Taskbar always-on tasks', () => {
     render(<Harness />);
 
     await user.click(
-      screen.getByRole('button', { name: /close about\.exe/i }),
+      screen.getByRole('button', { name: /close projects\.exe/i }),
     );
-    expect(screen.queryByText('about body')).not.toBeInTheDocument();
+    expect(screen.queryByText('projects body')).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: /^start$/i }));
-    await user.click(screen.getByRole('menuitem', { name: /about/i }));
+    await user.click(screen.getByRole('menuitem', { name: /projects/i }));
 
-    expect(screen.getByText('about body')).toBeInTheDocument();
+    expect(screen.getByText('projects body')).toBeInTheDocument();
   });
 
   it('does not add a task button when a window is closed', async () => {

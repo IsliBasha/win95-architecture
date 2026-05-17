@@ -5,7 +5,6 @@ import { clearWindowPositions } from '../hooks/useWindowPosition.js';
 import { AppGlyph } from '../lib/AppGlyph.jsx';
 
 const MENU_ITEMS = [
-  { id: 'about', label: 'About', icon: 'info' },
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'stack', label: 'Stack', icon: 'term' },
   { id: 'contact', label: 'Email', icon: 'mail' },

@@ -14,7 +14,6 @@ import { BSOD } from './components/BSOD.jsx';
 import { BootSequence } from './components/BootSequence.jsx';
 import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
-import { NotepadAbout } from './components/NotepadAbout.jsx';
 import { ContactExe } from './components/ContactExe.jsx';
 import { IExplorer } from './components/IExplorer.jsx';
 import { Notes } from './components/Notes.jsx';
@@ -23,7 +22,6 @@ import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
 
 const WINDOW_ORDER = [
-  'about',
   'projects',
   'stack',
   'contact',
@@ -35,7 +33,6 @@ const WINDOW_ORDER = [
   'notes',
 ];
 const INITIALLY_CLOSED = [
-  'about',
   'projects',
   'stack',
   'contact',
@@ -48,7 +45,6 @@ const INITIALLY_CLOSED = [
 ];
 
 const ICONS = [
-  { kind: 'about',       label: 'about.txt',       target: 'about'       },
   { kind: 'projects',    label: 'projects',         target: 'projects'    },
   { kind: 'stack',       label: 'stack.cmd',        target: 'stack'       },
   { kind: 'contact',     label: 'email.exe',        target: 'contact'     },
@@ -161,16 +157,6 @@ function App() {
             />
           ))}
         </div>
-
-        <Window
-          id="about"
-          title="about.txt"
-          className="win-about"
-          bootDelayMs={0}
-          contentClassName="win-about__content"
-        >
-          <NotepadAbout />
-        </Window>
 
         <Window
           id="projects"

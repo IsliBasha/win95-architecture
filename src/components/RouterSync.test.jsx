@@ -46,9 +46,9 @@ describe('RouterSync — URL → window state (mount)', () => {
     expect(screen.getByTestId('state-notes')).toHaveTextContent('closed');
   });
 
-  it('opens the about window when URL starts at /about', () => {
-    render(<TestApp initialEntries={['/about']} />);
-    expect(screen.getByTestId('state-about')).toHaveTextContent('open');
+  it('opens the notes window when URL starts at /notes (second ID)', () => {
+    render(<TestApp initialEntries={['/notes']} />);
+    expect(screen.getByTestId('state-notes')).toHaveTextContent('open');
   });
 
   it('opens the notes window when URL starts at /notes', () => {

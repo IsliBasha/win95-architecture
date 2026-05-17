@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useWindowStack } from '../context/windowStackContext.js';
 
 const WINDOW_IDS = new Set([
-  'about', 'projects', 'stack', 'contact', 'readme',
+  'projects', 'stack', 'contact', 'readme',
   'minesweeper', 'snake', 'paint', 'ie', 'notes',
 ]);
 
