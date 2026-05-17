@@ -104,6 +104,18 @@ export function AppGlyph({ kind, size = 32 }) {
       </svg>
     );
   }
+  if (kind === 'ie') {
+    return (
+      <svg {...props}>
+        <rect x="2" y="2" width="28" height="28" fill="#ffffff" stroke="#000080" />
+        <rect x="2" y="2" width="28" height="4" fill="#000080" />
+        <ellipse cx="16" cy="18" rx="8" ry="6" fill="none" stroke="#0066cc" strokeWidth="2" />
+        <ellipse cx="16" cy="18" rx="3" ry="6" fill="none" stroke="#0066cc" strokeWidth="1" />
+        <line x1="8" y1="18" x2="24" y2="18" stroke="#0066cc" strokeWidth="1" />
+        <rect x="22" y="5" width="6" height="4" fill="#ffcc00" stroke="#cc8800" strokeWidth="1" />
+      </svg>
+    );
+  }
   if (kind === 'paint') {
     return (
       <svg {...props}>

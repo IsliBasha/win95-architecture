@@ -2061,3 +2061,154 @@ textarea.win-field {
     --tilt: -0.8deg;
   }
 }
+
+/* ── Internet Explorer ─────────────────────────────────── */
+.win-ie {
+  width: min(640px, 96vw);
+  height: min(480px, 85vh);
+}
+
+.win-ie__content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+}
+
+.ie-toolbar {
+  display: flex;
+  gap: 2px;
+  padding: 2px 4px;
+  border-bottom: 1px solid #808080;
+  background: #c0c0c0;
+  flex-shrink: 0;
+}
+
+.ie-toolbar__btn {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  min-width: 52px;
+}
+
+.ie-toolbar__btn:disabled {
+  color: #808080;
+  cursor: default;
+}
+
+.ie-address-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  border-bottom: 2px inset #808080;
+  background: #c0c0c0;
+  flex-shrink: 0;
+}
+
+.ie-address-bar__label {
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.ie-address-bar__input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  padding: 1px 4px;
+  border: 2px inset #808080;
+  background: #ffffff;
+  outline: none;
+}
+
+.ie-address-bar__go {
+  font-size: 0.7rem;
+  padding: 1px 6px;
+}
+
+.ie-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #ffffff;
+  padding: 8px 12px;
+  font-family: var(--font-main);
+  font-size: 0.85rem;
+}
+
+/* IE page styles */
+.ie-page {
+  max-width: 520px;
+}
+
+.ie-page h2 {
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0 0 6px;
+  color: #000080;
+}
+
+.ie-page p {
+  margin: 0 0 6px;
+  line-height: 1.4;
+}
+
+.ie-page hr {
+  border: none;
+  border-top: 1px solid #808080;
+  margin: 8px 0;
+}
+
+.ie-page__banner {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #000080;
+  border-bottom: 3px solid #000080;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+.ie-page__links {
+  padding-left: 16px;
+  margin: 0 0 8px;
+  list-style: disc;
+}
+
+.ie-page__links li {
+  margin-bottom: 3px;
+}
+
+.ie-page__footer {
+  font-size: 0.72rem;
+  color: #808080;
+  margin: 0;
+}
+
+.ie-page__search-box {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: #ffffff;
+  border: 2px inset #808080;
+  padding: 4px 8px;
+  display: inline-block;
+}
+
+.ie-page--error h2 {
+  color: #cc0000;
+}
+
+.ie-page--error ul {
+  padding-left: 20px;
+  margin: 8px 0;
+}
+
+.ie-page--error li {
+  margin-bottom: 4px;
+}
+
+@media (min-width: 768px) {
+  .win-ie {
+    top: 6%;
+    left: 20%;
+    --tilt: 0.4deg;
+  }
+}

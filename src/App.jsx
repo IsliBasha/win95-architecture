@@ -14,6 +14,7 @@ import { Screensaver } from './components/Screensaver.jsx';
 import { ContextMenu } from './components/ContextMenu.jsx';
 import { NotepadAbout } from './components/NotepadAbout.jsx';
 import { ContactExe } from './components/ContactExe.jsx';
+import { IExplorer } from './components/IExplorer.jsx';
 import { ReadmeViewer } from './components/ReadmeViewer.jsx';
 import { useInactivity } from './hooks/useInactivity.js';
 import { projects } from './data/projects.js';
@@ -27,6 +28,7 @@ const WINDOW_ORDER = [
   'minesweeper',
   'snake',
   'paint',
+  'ie',
 ];
 const INITIALLY_CLOSED = [
   'about',
@@ -37,6 +39,7 @@ const INITIALLY_CLOSED = [
   'minesweeper',
   'snake',
   'paint',
+  'ie',
 ];
 
 const ICONS = [
@@ -48,6 +51,7 @@ const ICONS = [
   { kind: 'minesweeper', label: 'minesweeper.exe',  target: 'minesweeper' },
   { kind: 'snake',       label: 'snake.exe',        target: 'snake'       },
   { kind: 'paint',       label: 'paint.exe',        target: 'paint'       },
+  { kind: 'ie',          label: 'iexplore.exe',     target: 'ie'          },
 ];
 
 const ICON_H = 80;
@@ -228,6 +232,16 @@ function App() {
           contentClassName="win-paint__content"
         >
           <Paint />
+        </Window>
+
+        <Window
+          id="ie"
+          title="Internet Explorer"
+          className="win-ie"
+          bootDelayMs={0}
+          contentClassName="win-ie__content"
+        >
+          <IExplorer />
         </Window>
       </main>
       <Taskbar />
