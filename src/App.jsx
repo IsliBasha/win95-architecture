@@ -46,7 +46,7 @@ const ICONS = [
   { kind: 'about',       label: 'about.txt',       target: 'about'       },
   { kind: 'projects',    label: 'projects',         target: 'projects'    },
   { kind: 'stack',       label: 'stack.cmd',        target: 'stack'       },
-  { kind: 'contact',     label: 'contact.exe',      target: 'contact'     },
+  { kind: 'contact',     label: 'email.exe',        target: 'contact'     },
   { kind: 'resume',      label: 'readme.txt',       target: 'readme'      },
   { kind: 'minesweeper', label: 'minesweeper.exe',  target: 'minesweeper' },
   { kind: 'snake',       label: 'snake.exe',        target: 'snake'       },
@@ -186,7 +186,7 @@ function App() {
 
         <Window
           id="contact"
-          title="contact.exe"
+          title="email.exe"
           className="win-contact"
           bootDelayMs={360}
           contentClassName="win-contact__content"

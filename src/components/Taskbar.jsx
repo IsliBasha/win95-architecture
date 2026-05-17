@@ -8,7 +8,7 @@ const MENU_ITEMS = [
   { id: 'about', label: 'About', icon: 'info' },
   { id: 'projects', label: 'Projects', icon: 'folder' },
   { id: 'stack', label: 'Stack', icon: 'term' },
-  { id: 'contact', label: 'Contact', icon: 'mail' },
+  { id: 'contact', label: 'Email', icon: 'mail' },
   { id: 'paint', label: 'Paint', icon: 'paint' },
   { id: 'ie', label: 'Internet Explorer', icon: 'ie' },
 ];
