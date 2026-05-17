@@ -1,5 +1,7 @@
 import { useCallback, useState } from 'react';
+import { HashRouter } from 'react-router-dom';
 import { WindowStackProvider } from './context/WindowStack.jsx';
+import { RouterSync } from './components/RouterSync.jsx';
 import { Window } from './components/Window.jsx';
 import { Taskbar } from './components/Taskbar.jsx';
 import { DesktopIcon } from './components/DesktopIcon.jsx';
@@ -128,10 +130,12 @@ function App() {
   }, []);
 
   return (
+    <HashRouter>
     <WindowStackProvider
       initialOrder={WINDOW_ORDER}
       initialClosed={INITIALLY_CLOSED}
     >
+      <RouterSync />
       {screensaverOn && (
         <Screensaver onDismiss={() => setScreensaverOn(false)} />
       )}
@@ -262,6 +266,7 @@ function App() {
       <BSOD />
       <BootSequence />
     </WindowStackProvider>
+    </HashRouter>
   );
 }
 
