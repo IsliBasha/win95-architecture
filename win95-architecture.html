@@ -409,7 +409,7 @@ body::before{
   font-family:var(--mono);font-size:clamp(.76rem,1.1vw,.92rem);
   display:none;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;line-height:2.2;
-  z-index:99997;padding:clamp(20px,5vw,80px);
+  z-index:100000;padding:clamp(20px,5vw,80px);
   transition:opacity 360ms ease-out;
 }
 #s1-bsod.bsod-out{opacity:0;pointer-events:none}
@@ -1390,11 +1390,9 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   function dismiss() {
     if (done) return;
     done = true;
+    if (window.runS1Bsod) window.runS1Bsod();
     boot.classList.add('fade-out');
-    setTimeout(function () {
-      boot.remove();
-      if (window.runS1Bsod) window.runS1Bsod();
-    }, 540);
+    setTimeout(function () { boot.remove(); }, 540);
   }
 
   /* [delay_ms, text, bright] */
