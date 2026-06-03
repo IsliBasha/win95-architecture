@@ -253,17 +253,158 @@ html,body{
 .sticky{
   background:var(--memo);
   padding:clamp(20px,3.5vw,40px);
-  transform:rotate(1.5deg);
-  box-shadow:3px 4px 0 rgba(0,0,0,.12),8px 14px 20px rgba(0,0,0,.1);
-  max-width:600px;width:90vw;font-family:var(--mono);
+  transform:rotate(-2.5deg);
+  box-shadow:4px 6px 0 rgba(0,0,0,.14),10px 18px 28px rgba(0,0,0,.09);
+  max-width:720px;width:92vw;font-family:var(--mono);
 }
-.sticky-name{font-size:clamp(1.4rem,4.5vw,2.6rem);font-weight:700;letter-spacing:.04em;color:var(--ink);line-height:1.05}
+.sticky-name{font-size:clamp(2.8rem,9vw,6rem);font-weight:700;letter-spacing:.04em;color:var(--ink);line-height:1}
 .sticky-role{font-size:clamp(.72rem,1.3vw,.875rem);font-weight:500;color:var(--chrome-darker);margin-top:6px}
-.sticky-body{font-family:var(--sans);font-size:clamp(.76rem,1.2vw,.9rem);line-height:1.65;color:var(--ink);margin-top:16px}
+.sticky-body{font-family:var(--sans);font-size:clamp(.78rem,1.2vw,.92rem);line-height:1.65;color:var(--ink);margin-top:22px}
 .sticky-hint{font-family:var(--mono);font-size:.7rem;color:var(--chrome-darker);margin-top:14px}
+
+/* ── BREAKOUT LAYOUTS ────────────────────────────── */
+.s1-layout,.s-author{flex-direction:column;align-items:stretch;justify-content:stretch;padding:0}
+.s1-layout .win,.s-author .win{flex:1;height:auto;min-height:0;max-height:none;max-width:100%}
+
+/* ── CROWN — BREAKOUT TYPOGRAPHY ─────────────────── */
+.s1-crown{
+  flex-shrink:0;
+  padding:clamp(10px,2vw,20px) clamp(10px,2vw,20px) clamp(3px,0.5vw,6px);
+  font-family:var(--mono);
+  font-size:clamp(3rem,10.5vw,8rem);
+  font-weight:700;
+  letter-spacing:-0.025em;
+  line-height:0.87;
+  color:var(--ink);
+}
+.author-crown{
+  flex-shrink:0;
+  padding:clamp(6px,1.2vw,10px) clamp(10px,2vw,20px) 0;
+  font-family:var(--mono);
+  font-size:clamp(1.9rem,5.8vw,4.4rem);
+  font-weight:700;
+  letter-spacing:-0.02em;
+  line-height:1;
+  color:var(--ink);
+}
+.author-sub{
+  flex-shrink:0;
+  padding:2px clamp(10px,2vw,20px) clamp(3px,0.5vw,5px);
+  font-family:var(--mono);
+  font-size:clamp(.62rem,.95vw,.78rem);
+  color:var(--chrome-darker);
+  letter-spacing:.01em;
+}
+
+/* ── CROWN ENTRANCE ──────────────────────────────── */
+.s1-layout.visible .s1-crown{animation:crown-in 200ms var(--ease) both}
+.s-author.visible .author-crown{animation:crown-in 160ms var(--ease) both}
+.s-author.visible .author-sub{animation:crown-in 200ms var(--ease) both 20ms}
+.s-author.visible .win,.s1-layout.visible .win{animation-delay:50ms}
+@keyframes crown-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── ANIMATION SPEED — SNAP ──────────────────────── */
+.slide.visible .win{animation-duration:180ms}
+.slide.visible .sticky{animation-duration:220ms}
+
+/* ── S11 HERO STAT ───────────────────────────────── */
+.stat-hero{
+  font-family:var(--mono);
+  font-size:clamp(5rem,17vw,12rem);
+  font-weight:700;
+  color:var(--ink);
+  letter-spacing:.04em;
+  line-height:0.88;
+  text-align:center;
+}
+
+/* ── S2 APP GRID ─────────────────────────────────── */
+.s2-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  gap:6px;flex:1;min-height:0;
+}
+.app-tile{
+  display:flex;flex-direction:column;overflow:hidden;min-height:0;
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);
+}
+.app-tile-tb{
+  background:linear-gradient(90deg,var(--tb-from),var(--tb-to));
+  color:#fff;font-family:var(--mono);font-size:clamp(.52rem,.78vw,.64rem);font-weight:700;
+  padding:2px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:.01em;flex-shrink:0;
+}
+.app-tile-body{
+  background:var(--win-bg);border-top:1px solid var(--chrome-dark);
+  flex:1;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(1rem,2.2vw,1.5rem);min-height:0;overflow:hidden;
+}
+
+/* S2 element entrance — initial hidden */
+#s2 .s2-quote,#s2 .s2-footer,#s2 .s2-grid .app-tile{opacity:0}
+@keyframes s2-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+#s2.visible .s2-quote{animation:s2-in 160ms var(--ease) both;animation-delay:80ms}
+#s2.visible .s2-grid .app-tile{animation:s2-in 90ms var(--ease) both}
+#s2.visible .s2-grid .app-tile:nth-child(1){animation-delay:200ms}
+#s2.visible .s2-grid .app-tile:nth-child(2){animation-delay:255ms}
+#s2.visible .s2-grid .app-tile:nth-child(3){animation-delay:310ms}
+#s2.visible .s2-grid .app-tile:nth-child(4){animation-delay:365ms}
+#s2.visible .s2-grid .app-tile:nth-child(5){animation-delay:420ms}
+#s2.visible .s2-grid .app-tile:nth-child(6){animation-delay:475ms}
+#s2.visible .s2-grid .app-tile:nth-child(7){animation-delay:530ms}
+#s2.visible .s2-grid .app-tile:nth-child(8){animation-delay:585ms}
+#s2.visible .s2-grid .app-tile:nth-child(9){animation-delay:640ms}
+#s2.visible .s2-footer{animation:s2-in 100ms var(--ease) both;animation-delay:720ms}
+@media(prefers-reduced-motion:reduce){
+  #s2 .s2-quote,#s2 .s2-footer,#s2 .s2-grid .app-tile{opacity:1;animation:none!important}
+}
+
+/* ── S11 BULLET STATES ───────────────────────────── */
+.s11-bullet{
+  opacity:0;transform:translateY(4px);
+  transition:opacity 200ms var(--ease),transform 200ms var(--ease);
+}
+
+/* ── CRT FLASH ───────────────────────────────────── */
+#crt-flash{
+  position:fixed;inset:0;
+  background:var(--chrome-light);
+  opacity:0;
+  pointer-events:none;
+  z-index:99998;
+}
+@keyframes crt-flash{0%{opacity:.48}55%{opacity:.1}100%{opacity:0}}
+.crt-on{animation:crt-flash 110ms ease-out forwards}
+
+/* ── GLOBAL SCANLINES ────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.016) 2px,rgba(0,0,0,.016) 3px);
+  pointer-events:none;z-index:9997;
+}
+
+/* ── BIOS BOOT SCREEN ───────────────────────────── */
+#bios-boot{
+  position:fixed;inset:0;
+  background:#020202;
+  color:#aaaaaa;
+  font-family:var(--mono);
+  font-size:clamp(.66rem,1.02vw,.82rem);
+  line-height:1.65;
+  padding:clamp(14px,2vw,22px) clamp(18px,2.8vw,30px);
+  z-index:99999;
+  overflow:hidden;
+  transition:opacity 500ms ease-out;
+}
+#bios-boot.fade-out{opacity:0;pointer-events:none}
+.bios-b{color:#ffffff}
+.bios-ok{color:#aaaaaa}
 </style>
 </head>
 <body>
+<div id="bios-boot"><div id="bios-lines"></div></div>
 <div id="deck">
 
 <!-- ══ S1 · TITLE ══════════════════════════════════ -->
@@ -274,11 +415,10 @@ html,body{
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
-      <div class="win-inner title-inner">
-        <div class="h1">win95 Desktop<br>Simulation</div>
+      <div class="win-inner title-inner" style="gap:12px;padding:clamp(16px,3vw,36px)">
+        <div style="font-family:var(--mono);font-size:clamp(2.8rem,8.5vw,6.5rem);font-weight:700;letter-spacing:-0.02em;line-height:0.88;color:var(--ink)">win95<br>Desktop<br>Simulation</div>
         <div class="hr" style="width:100%"></div>
-        <div class="label dim">Win95 Desktop Simulation · Architecture Deep Dive</div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:6px">
+        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center">
           <span class="chip">React 19</span>
           <span class="chip">Vite 5</span>
           <span class="chip">HashRouter</span>
@@ -314,19 +454,29 @@ html,body{
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
-      <div class="win-inner">
-        <div class="h2">What is this?</div>
+      <div class="win-inner" style="padding:clamp(8px,1.5vw,14px);gap:8px">
+        <div class="s2-quote" style="font-family:var(--mono);font-size:clamp(.88rem,1.6vw,1.08rem);font-weight:700;letter-spacing:-.01em;line-height:1.2;color:var(--ink)">
+          "The visitor doesn't browse a site.<br>They <span style="text-decoration:underline">use</span> a machine."
+        </div>
         <div class="hr"></div>
-        <p class="body">A university project: a fully interactive Windows 95 desktop simulation running entirely in the browser. Draggable windows, a working taskbar, a boot sequence, classic games, a paint app — built with React 19 and no UI libraries. The visitor does not browse a site — they <em>use</em> a machine.</p>
-        <div class="hl">"Every design decision follows from one question: does this feel like touching real plastic hardware?"</div>
+        <div class="s2-grid">
+          <div class="app-tile"><div class="app-tile-tb">&#128193;&nbsp;Projects.exe</div><div class="app-tile-body">&#128194;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#128196;&nbsp;about.txt</div><div class="app-tile-body">&#128221;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#9993;&nbsp;contact.exe</div><div class="app-tile-body">&#9993;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#9000;&nbsp;stack.cmd</div><div class="app-tile-body" style="background:var(--term);color:var(--phosphor);font-family:var(--mono);font-size:.7rem;letter-spacing:.04em">C:\&gt;_</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#128163;&nbsp;Minesweeper</div><div class="app-tile-body">&#128163;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#128014;&nbsp;Snake.exe</div><div class="app-tile-body">&#128014;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#127912;&nbsp;Paint.exe</div><div class="app-tile-body">&#127912;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#128196;&nbsp;resume.pdf</div><div class="app-tile-body">&#128220;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#128200;&nbsp;SiteCounter</div><div class="app-tile-body">&#128200;</div></div>
+        </div>
         <div class="hr"></div>
-        <div class="h2" style="margin-bottom:2px">Five commitments</div>
-        <div class="col" style="gap:4px">
-          <div class="body">→ Draggable, resizable windows — built from scratch, zero UI libraries</div>
-          <div class="body">→ Win95 bevel on every surface — four-layer border + inset shadow, no blur</div>
-          <div class="body">→ Zero border-radius — pixel-sharp is the contract, no exceptions</div>
-          <div class="body">→ IBM Plex Mono for the machine · IBM Plex Sans for the person</div>
-          <div class="body">→ 9 interactive applications, 172 tests, one self-contained experience</div>
+        <div class="s2-footer" style="display:flex;flex-wrap:wrap;gap:5px">
+          <span class="chip">9 apps</span>
+          <span class="chip">172 tests</span>
+          <span class="chip">5 engineers</span>
+          <span class="chip">0 UI libraries</span>
+          <span class="chip">0 border-radius</span>
         </div>
       </div>
     </div>
@@ -405,10 +555,12 @@ html,body{
 </section>
 
 <!-- ══ S5 · WINDOW ENGINE — ISLI ═══════════════════ -->
-<section class="slide" id="s5">
+<section class="slide s-author" id="s5">
+  <div class="author-crown">Isli Basha</div>
+  <div class="author-sub">Project Lead · Core Architecture · Window Engine</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#9881;&nbsp;Window.jsx — Isli Basha · Project Lead &amp; Core Architecture</span>
+      <span>&#9881;&nbsp;Window.jsx — Drag · Z-Index · HashRouter</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
@@ -502,10 +654,12 @@ html,body{
 </section>
 
 <!-- ══ S7 · GAMES — SIDRIT ═════════════════════════ -->
-<section class="slide" id="s7">
+<section class="slide s-author" id="s7">
+  <div class="author-crown">Sidrit Halili</div>
+  <div class="author-sub">Games Developer · Pure Logic · Unit Testing Lead</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#127918;&nbsp;games — Sidrit Halili · Games Developer &amp; Unit Testing Lead</span>
+      <span>&#127918;&nbsp;games — Safe First Click · Functional Updater</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
@@ -552,10 +706,12 @@ html,body{
 </section>
 
 <!-- ══ S8 · CANVAS — SERXHIO ═══════════════════════ -->
-<section class="slide" id="s8">
+<section class="slide s-author" id="s8">
+  <div class="author-crown">Serxhio Lekgegaj</div>
+  <div class="author-sub">Canvas · Visual Effects · Easter Eggs · SVG System</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#127912;&nbsp;canvas — Serxhio Lekgegaj · Pixels, Visual Effects &amp; SVG</span>
+      <span>&#127912;&nbsp;canvas — BFS Paint · 3D Starfield · BSOD</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
@@ -604,10 +760,12 @@ html,body{
 </section>
 
 <!-- ══ S9 · DATA LAYER — HELENA ════════════════════ -->
-<section class="slide" id="s9">
+<section class="slide s-author" id="s9">
+  <div class="author-crown">Helena Petro</div>
+  <div class="author-sub">Data Layer · CRUD Apps · Forms &amp; API</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#128200;&nbsp;data — Helena Petro · Data Layer, CRUD &amp; API</span>
+      <span>&#128200;&nbsp;data — Notes · API · LocalStorage</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
@@ -658,10 +816,12 @@ html,body{
 </section>
 
 <!-- ══ S10 · SYSTEM UX — AKSEL ════════════════════ -->
-<section class="slide" id="s10">
+<section class="slide s-author" id="s10">
+  <div class="author-crown">Aksel Mana</div>
+  <div class="author-sub">Hooks · Boot Experience · Test Infrastructure</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#9203;&nbsp;system — Aksel Mana · Hooks, Boot &amp; Test Infrastructure</span>
+      <span>&#9203;&nbsp;system — useClock · useInactivity · BootSequence</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
@@ -721,54 +881,18 @@ html,body{
     <div class="win-body">
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
-          <div class="col" style="justify-content:center;align-items:stretch;gap:10px">
-            <div class="stat">
-              <div class="stat-n">172</div>
-              <div class="stat-l">tests passing · Vitest 3 + jsdom</div>
-            </div>
-            <div class="g2" style="gap:8px">
-              <div class="stat">
-                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">lib/</div>
-                <div class="stat-l">pure function tests — no DOM</div>
-              </div>
-              <div class="stat">
-                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">.jsx</div>
-                <div class="stat-l">component render + fire events</div>
-              </div>
-            </div>
-            <div class="g2" style="gap:8px">
-              <div class="stat">
-                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">data/</div>
-                <div class="stat-l">shape validation per entry</div>
-              </div>
-              <div class="stat">
-                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">hooks</div>
-                <div class="stat-l">behavior without component</div>
-              </div>
-            </div>
+          <div class="col" style="justify-content:center;align-items:center;gap:6px">
+            <div class="stat-hero" id="s11-counter">0</div>
+            <div style="font-family:var(--mono);font-size:.82rem;color:var(--chrome-darker);text-align:center;letter-spacing:.02em">tests passing</div>
+            <div style="font-family:var(--mono);font-size:.68rem;color:var(--chrome-dark);text-align:center">Vitest 3 + jsdom · 15 files</div>
           </div>
           <div class="col">
             <div class="h2" style="padding:2px 0">Co-location pattern</div>
-            <div class="arch" style="font-size:.7rem;line-height:1.8;flex:0;padding:10px 14px">
-<span style="color:#8be9fd">src/lib/</span><br>
-&nbsp;&nbsp;minesweeper.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← logic</span><br>
-&nbsp;&nbsp;minesweeper.test.js&nbsp;<span style="color:#6272a4">← tests live next to it</span><br>
-&nbsp;&nbsp;snake.js · snake.test.js<br>
-<br>
-<span style="color:#8be9fd">src/components/</span><br>
-&nbsp;&nbsp;Minesweeper.jsx<br>
-&nbsp;&nbsp;Minesweeper.test.jsx<br>
-<br>
-<span style="color:#8be9fd">src/data/</span><br>
-&nbsp;&nbsp;projects.js<br>
-&nbsp;&nbsp;projects.test.js&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← shape validation</span><br>
-<br>
-<span style="color:#8be9fd">src/test/setup.js</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← Aksel's foundation</span>
-            </div>
+            <div class="arch" id="s11-tree" style="font-size:.7rem;line-height:1.8;flex-shrink:0;min-height:0;padding:10px 14px"></div>
             <div class="col" style="gap:4px;margin-top:4px">
-              <div class="body">→ Sidrit drove the culture — most of the 172 tests trace back to his lib files</div>
-              <div class="body">→ Aksel wrote setup.js first, unblocking all other test authors in parallel</div>
-              <div class="body">→ Data shape tests catch malformed entries at CI time, not during a live demo</div>
+              <div class="body s11-bullet">→ Sidrit drove the culture — most of the 172 tests trace back to his lib files</div>
+              <div class="body s11-bullet">→ Aksel wrote setup.js first, unblocking all other test authors in parallel</div>
+              <div class="body s11-bullet">→ Data shape tests catch malformed entries at CI time, not during a live demo</div>
             </div>
           </div>
         </div>
@@ -840,6 +964,7 @@ html,body{
 </section>
 
 </div><!-- /deck -->
+<div id="crt-flash"></div>
 
 <!-- ══ TASKBAR ══════════════════════════════════════ -->
 <nav id="taskbar" aria-label="Presentation navigation">
@@ -873,45 +998,101 @@ html,body{
     if (busy || idx < 0 || idx >= total || idx === cur) return;
     busy = true;
 
-    const dir  = idx > cur ? 1 : -1;
-    const old  = slides[cur];
-    const next = slides[idx];
+    var prevIdx = cur;
+    slides[cur].classList.remove('visible');
 
-    // immediately remove visible from old (no animation, just hide)
-    old.classList.remove('visible');
-    old.style.transition = 'none';
-    old.style.opacity    = '0';
-    old.style.transform  = '';
-
-    // position next off-screen, show it
-    next.style.transition = 'none';
-    next.style.transform  = 'translateX(' + (dir * 100) + '%)';
-    next.style.opacity    = '1';
-    next.classList.add('visible');
-
-    // force layout recalc so the starting position is applied
-    next.getBoundingClientRect();
-
-    // animate next into position
-    next.style.transition = 'transform 360ms cubic-bezier(0.2,0.8,0.25,1)';
-    next.style.transform  = 'translateX(0)';
+    var flash = document.getElementById('crt-flash');
+    flash.classList.remove('crt-on');
+    void flash.offsetWidth;
+    flash.classList.add('crt-on');
 
     cur = idx;
-    updateUI();
+    slides[idx].classList.add('visible');
 
-    setTimeout(function () {
-      // clean up inline styles so CSS takes over
-      old.style.transition  = '';
-      old.style.opacity     = '';
-      old.style.transform   = '';
-      next.style.transition = '';
-      next.style.transform  = '';
-      busy = false;
-    }, 400);
+    if (prevIdx === 10) resetS11();
+    if (idx === 10) setTimeout(runS11, 180);
+
+    updateUI();
+    setTimeout(function () { busy = false; }, 130);
   }
 
   function next() { go(cur + 1); }
   function prev() { go(cur - 1); }
+
+  // ── s11 animations ────────────────────────────────
+  function runS11() {
+    var counterEl = document.getElementById('s11-counter');
+    if (!counterEl) return;
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      counterEl.textContent = '172';
+      var container = document.getElementById('s11-tree');
+      if (container) {
+        container.innerHTML = '';
+        S11_LINES.forEach(function(html) {
+          var div = document.createElement('div');
+          div.innerHTML = html === '' ? '&nbsp;' : html;
+          container.appendChild(div);
+        });
+      }
+      document.querySelectorAll('#s11 .s11-bullet').forEach(function(b){b.style.opacity='1';b.style.transform='none';});
+      return;
+    }
+    var start = null;
+    var duration = 800;
+    function easeOut(t){return 1-Math.pow(1-t,3);}
+    function stepCounter(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts-start)/duration,1);
+      counterEl.textContent = Math.round(172*easeOut(p));
+      if(p<1) requestAnimationFrame(stepCounter);
+      else printTree();
+    }
+    requestAnimationFrame(stepCounter);
+  }
+
+  var S11_LINES = [
+    '<span style="color:#8be9fd">src/lib/</span>',
+    '&nbsp;&nbsp;minesweeper.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← logic</span>',
+    '&nbsp;&nbsp;minesweeper.test.js&nbsp;<span style="color:#6272a4">← tests live next to it</span>',
+    '&nbsp;&nbsp;snake.js · snake.test.js',
+    '',
+    '<span style="color:#8be9fd">src/components/</span>',
+    '&nbsp;&nbsp;Minesweeper.jsx',
+    '&nbsp;&nbsp;Minesweeper.test.jsx',
+    '',
+    '<span style="color:#8be9fd">src/data/</span>',
+    '&nbsp;&nbsp;projects.js',
+    '&nbsp;&nbsp;projects.test.js&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← shape validation</span>',
+    '',
+    '<span style="color:#8be9fd">src/test/setup.js</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← Aksel\'s foundation</span>',
+  ];
+
+  function printTree() {
+    var container = document.getElementById('s11-tree');
+    if (!container) return;
+    S11_LINES.forEach(function(html, i) {
+      setTimeout(function() {
+        var div = document.createElement('div');
+        div.innerHTML = html === '' ? '&nbsp;' : html;
+        container.appendChild(div);
+      }, i * 30);
+    });
+    var treeDelay = S11_LINES.length * 30 + 60;
+    document.querySelectorAll('#s11 .s11-bullet').forEach(function(b, i) {
+      setTimeout(function() { b.style.opacity='1'; b.style.transform='none'; }, treeDelay + i*100);
+    });
+  }
+
+  function resetS11() {
+    var counterEl = document.getElementById('s11-counter');
+    if (counterEl) counterEl.textContent = '0';
+    var container = document.getElementById('s11-tree');
+    if (container) container.innerHTML = '';
+    document.querySelectorAll('#s11 .s11-bullet').forEach(function(b) {
+      b.style.opacity='0'; b.style.transform='translateY(4px)';
+    });
+  }
 
   // ── ui ────────────────────────────────────────────
   function updateUI() {
@@ -966,6 +1147,74 @@ html,body{
     lastWheel = now;
     if (e.deltaY > 0) next(); else prev();
   }, { passive: true });
+})();
+</script>
+
+<script>
+/* ── BIOS POST BOOT SEQUENCE ──────────────────────────────────── */
+(function () {
+  'use strict';
+
+  var boot = document.getElementById('bios-boot');
+  var out  = document.getElementById('bios-lines');
+  var done = false;
+
+  function dismiss() {
+    if (done) return;
+    done = true;
+    boot.classList.add('fade-out');
+    setTimeout(function () { boot.remove(); }, 540);
+  }
+
+  /* [delay_ms, text, bright] */
+  var rows = [
+    [  0, 'AWARD BIOS ROM  v4.51PG'],
+    [160, 'Copyright (C) 1984-1995, Award Software, Inc.'],
+    [200, ''],
+    [100, 'WIN95 DESKTOP SIMULATION  —  ARCHITECTURE DEEP DIVE', true],
+    [160, 'Polis University  ·  2026  ·  Supervised by Hekuran Islamaj & Melisa Tufa'],
+    [ 80, ''],
+    [260, 'CPU  : React 19 + Vite 5 .......................  OK'],
+    [200, 'RAM  : 172 unit tests detected .................  PASS'],
+    [200, 'HDD  : 9 interactive applications ..............  LOADED'],
+    [200, 'NET  : HashRouter + Vercel Functions ............  LINKED'],
+    [200, 'VGA  : IBM Plex Mono + IBM Plex Sans ............  READY'],
+    [160, ''],
+    [240, 'ENGINEERS DETECTED: 5', true],
+    [150, '  Isli Basha        Project Lead & Core Architecture'],
+    [120, '  Sidrit Halili     Games & Pure Logic'],
+    [120, '  Serxhio Lekgegaj  Canvas, Visual Effects & SVG'],
+    [120, '  Helena Petro      Data Layer & API'],
+    [120, '  Aksel Mana        Hooks, Boot & Testing'],
+    [300, ''],
+    [220, 'Starting Windows 95…', true],
+  ];
+
+  var t = 0;
+  rows.forEach(function (r) {
+    t += r[0];
+    (function (text, bright, delay) {
+      setTimeout(function () {
+        if (done) return;
+        var el = document.createElement('div');
+        el.textContent = text;
+        if (bright) el.className = 'bios-b';
+        out.appendChild(el);
+      }, delay);
+    })(r[1], r[2], t);
+  });
+
+  /* auto-dismiss 1.2 s after last line */
+  setTimeout(dismiss, t + 1200);
+
+  /* skip on first keydown — capture phase blocks nav handlers during boot */
+  function onKey(e) {
+    e.stopPropagation();
+    dismiss();
+    document.removeEventListener('keydown', onKey, true);
+  }
+  document.addEventListener('keydown', onKey, true);
+  document.addEventListener('click', function () { dismiss(); }, { once: true });
 })();
 </script>
 </body>
