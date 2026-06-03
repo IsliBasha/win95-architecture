@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>win95-demo — Desktop Simulation · Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ─────────────────────────────────────── */
+:root {
+  --sky-top:#d6eaf8; --sky-bottom:#aed6f1;
+  --chrome:#c0c0c0; --chrome-dark:#808080; --chrome-darker:#404040;
+  --chrome-light:#dfdfdf; --chrome-lighter:#ececec;
+  --tb-from:#000080; --tb-to:#1084d0;
+  --accent:#1a73e8; --ink:#1a1a2e;
+  --win-bg:#fdfdfd; --memo:#fff9c4;
+  --phosphor:#33ff33; --term:#0c0c0c; --panic:#0000aa;
+  --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(0.2,0.8,0.25,1);
+}
+
+/* ── RESET ──────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+/* ── BEVEL ──────────────────────────────────────── */
+.bv-out{
+  border:1px solid;
+  border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);
+}
+.bv-in{
+  border:1px solid;
+  border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker),inset -1px -1px 0 var(--chrome-light);
+}
+.win-shad{box-shadow:4px 4px 0 rgba(0,0,0,.18)}
+
+/* ── ROOT ───────────────────────────────────────── */
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:var(--mono);
+  background:linear-gradient(180deg,var(--sky-top),var(--sky-bottom));
+}
+#deck{position:fixed;inset:0 0 40px 0;overflow:hidden}
+
+/* ── SLIDES ─────────────────────────────────────── */
+.slide{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(10px,2vw,20px);
+  opacity:0;pointer-events:none;
+}
+.slide.visible{opacity:1;pointer-events:auto}
+.slide.visible .win{animation:win-in 320ms var(--ease) both}
+.slide.visible .sticky{animation:win-in 340ms var(--ease) both}
+@keyframes win-in{from{opacity:0;transform:translateY(6px) scale(.98)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  .slide.visible .win,.slide.visible .sticky{animation:none}
+}
+
+/* ── WIN SHELL ──────────────────────────────────── */
+.win{
+  width:100%;max-width:920px;
+  height:100%;max-height:100%;
+  background:var(--chrome);
+  display:flex;flex-direction:column;
+}
+.win-title{
+  background:linear-gradient(90deg,var(--tb-from),var(--tb-to));
+  color:#fff;
+  font-family:var(--mono);font-size:.8125rem;font-weight:700;
+  padding:3px 6px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;user-select:none;letter-spacing:.02em;
+}
+.win-btns{display:flex;gap:2px}
+.win-btn{
+  width:16px;height:14px;background:var(--chrome);
+  border:1px solid;
+  border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:var(--ink);cursor:default;font-family:var(--mono);line-height:1;
+}
+.win-body{flex:1;overflow:hidden;display:flex;flex-direction:column;padding:4px}
+.win-inner{
+  background:var(--win-bg);
+  border:1px solid;
+  border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  flex:1;overflow:hidden;
+  padding:clamp(8px,1.5vw,18px);
+  display:flex;flex-direction:column;gap:8px;
+}
+
+/* ── TYPE ───────────────────────────────────────── */
+.h1{font-family:var(--mono);font-size:clamp(1.5rem,4vw,3rem);font-weight:700;letter-spacing:.04em;line-height:1.1;color:var(--ink)}
+.h2{font-family:var(--mono);font-size:clamp(.82rem,1.4vw,.9375rem);font-weight:700;letter-spacing:.02em;color:var(--ink)}
+.body{font-family:var(--sans);font-size:clamp(.76rem,1.1vw,.9rem);line-height:1.55;color:var(--ink)}
+.label{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.02em;color:var(--ink)}
+.dim{color:var(--chrome-darker)}
+
+/* ── DIVIDER ─────────────────────────────────────── */
+.hr{height:2px;background:transparent;border-top:1px solid var(--chrome-dark);border-bottom:1px solid white;flex-shrink:0}
+
+/* ── TERMINAL ────────────────────────────────────── */
+.term-panel{
+  background:var(--term);color:var(--phosphor);
+  font-family:var(--mono);font-size:clamp(.62rem,.95vw,.78rem);line-height:1.65;
+  padding:10px 14px;
+  border:1px solid var(--chrome-darker);
+  box-shadow:inset 1px 1px 0 rgba(0,0,0,.6);
+  overflow:hidden;flex:1;position:relative;
+}
+.term-panel::after{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);
+  pointer-events:none;
+}
+.cursor{display:inline-block;width:8px;height:.9em;background:var(--phosphor);vertical-align:bottom;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.cursor{animation:none}}
+
+/* ── CODE ────────────────────────────────────────── */
+.code{
+  background:#1e1e2e;
+  font-family:var(--mono);font-size:clamp(.6rem,.9vw,.75rem);line-height:1.65;
+  padding:9px 13px;
+  border:1px solid var(--chrome-darker);
+  overflow:hidden;flex-shrink:0;
+}
+.code .kw{color:#ff79c6}.code .fn{color:#50fa7b}.code .str{color:#f1fa8c}
+.code .cm{color:#6272a4}.code .num{color:#bd93f9}.code .var{color:#f8f8f2}
+.code .ty{color:#8be9fd}
+
+/* ── CHIP ────────────────────────────────────────── */
+.chip{
+  background:var(--chrome);padding:2px 8px;
+  font-family:var(--mono);font-size:.7rem;font-weight:500;
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  white-space:nowrap;
+}
+
+/* ── HIGHLIGHT ───────────────────────────────────── */
+.hl{background:var(--memo);padding:6px 10px;border-left:3px solid var(--chrome-darker);font-family:var(--mono);font-size:.72rem;line-height:1.5;flex-shrink:0}
+
+/* ── ARCH TREE ───────────────────────────────────── */
+.arch{
+  background:var(--term);color:var(--phosphor);
+  font-family:var(--mono);font-size:clamp(.58rem,.88vw,.74rem);line-height:1.75;
+  padding:10px 14px;
+  border:1px solid var(--chrome-darker);
+  overflow:hidden;
+}
+
+/* ── AUTHOR CARD ─────────────────────────────────── */
+.ac{
+  background:var(--chrome-lighter);
+  padding:7px 10px;
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);
+  display:flex;flex-direction:column;gap:2px;flex:1;
+}
+.ac-name{font-family:var(--mono);font-size:.8rem;font-weight:700;color:var(--ink)}
+.ac-role{font-family:var(--mono);font-size:.65rem;color:var(--chrome-darker)}
+.ac-key{font-family:var(--sans);font-size:.7rem;color:var(--ink);line-height:1.35;margin-top:2px}
+
+/* ── GRIDS ───────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.col{display:flex;flex-direction:column;gap:6px}
+
+/* ── STAT BOX ────────────────────────────────────── */
+.stat{
+  background:var(--chrome-lighter);padding:8px 12px;
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  text-align:center;flex-shrink:0;
+}
+.stat-n{font-family:var(--mono);font-size:clamp(1.3rem,3vw,2.2rem);font-weight:700;color:var(--tb-from);letter-spacing:.04em}
+.stat-l{font-family:var(--mono);font-size:.68rem;color:var(--chrome-darker);margin-top:2px}
+
+/* ── TASKBAR NAV ────────────────────────────────── */
+#taskbar{
+  position:fixed;bottom:0;left:0;right:0;height:40px;
+  background:var(--chrome);
+  display:flex;align-items:center;gap:4px;
+  padding:4px 6px;z-index:9999;
+  border-top:2px solid white;
+  box-shadow:0 -1px 0 var(--chrome-dark);
+}
+.tb-start{
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);
+  padding:2px 10px;font-family:var(--mono);font-size:.75rem;font-weight:700;
+  cursor:pointer;color:var(--ink);display:flex;align-items:center;gap:5px;flex-shrink:0;
+}
+.tb-start:active{border-color:var(--chrome-dark) white white var(--chrome-dark);box-shadow:inset 1px 1px 0 var(--chrome-darker);padding:3px 9px 1px 11px}
+.tb-btn{
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);
+  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:10px;font-family:var(--mono);color:var(--ink);flex-shrink:0;
+}
+.tb-btn:hover{background:var(--chrome-light)}
+.tb-btn:active{border-color:var(--chrome-dark) white white var(--chrome-dark);box-shadow:inset 1px 1px 0 var(--chrome-darker)}
+.tb-prog{
+  flex:1;height:6px;min-width:60px;
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  position:relative;overflow:hidden;
+}
+.tb-prog-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--tb-from),var(--tb-to));transition:width 360ms var(--ease)}
+.tb-counter{
+  font-family:var(--mono);font-size:.72rem;color:var(--ink);
+  padding:2px 8px;
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  background:var(--chrome-light);white-space:nowrap;flex-shrink:0;
+}
+.tb-clock{
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  padding:2px 8px;font-family:var(--mono);font-size:.72rem;color:var(--ink);flex-shrink:0;
+}
+
+/* ── TITLE SLIDE SPECIAL ─────────────────────────── */
+.title-inner{align-items:center;justify-content:center;text-align:center;gap:14px}
+
+/* ── POLIS LOGO (pixelated) ──────────────────────── */
+.polis-logo{
+  image-rendering:pixelated;
+  image-rendering:crisp-edges;
+  flex-shrink:0;
+}
+.uni-row{
+  display:flex;align-items:center;gap:10px;
+  padding:6px 10px;
+  background:var(--chrome-lighter);
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+}
+.uni-name{font-family:var(--mono);font-size:.78rem;font-weight:700;color:var(--ink)}
+.uni-prof{font-family:var(--mono);font-size:.65rem;color:var(--chrome-darker);margin-top:1px}
+
+/* ── STICKY CLOSE ────────────────────────────────── */
+.sticky{
+  background:var(--memo);
+  padding:clamp(20px,3.5vw,40px);
+  transform:rotate(1.5deg);
+  box-shadow:3px 4px 0 rgba(0,0,0,.12),8px 14px 20px rgba(0,0,0,.1);
+  max-width:600px;width:90vw;font-family:var(--mono);
+}
+.sticky-name{font-size:clamp(1.4rem,4.5vw,2.6rem);font-weight:700;letter-spacing:.04em;color:var(--ink);line-height:1.05}
+.sticky-role{font-size:clamp(.72rem,1.3vw,.875rem);font-weight:500;color:var(--chrome-darker);margin-top:6px}
+.sticky-body{font-family:var(--sans);font-size:clamp(.76rem,1.2vw,.9rem);line-height:1.65;color:var(--ink);margin-top:16px}
+.sticky-hint{font-family:var(--mono);font-size:.7rem;color:var(--chrome-darker);margin-top:14px}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ══ S1 · TITLE ══════════════════════════════════ -->
+<section class="slide" id="s1">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128190;&nbsp;win95-demo — Desktop Simulation</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner title-inner">
+        <div class="h1">win95 Desktop<br>Simulation</div>
+        <div class="hr" style="width:100%"></div>
+        <div class="label dim">Win95 Desktop Simulation · Architecture Deep Dive</div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-top:6px">
+          <span class="chip">React 19</span>
+          <span class="chip">Vite 5</span>
+          <span class="chip">HashRouter</span>
+          <span class="chip">Vitest 3</span>
+          <span class="chip">Vercel</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center">
+          <span class="chip">172 tests</span>
+          <span class="chip">9 windows</span>
+          <span class="chip">5 authors</span>
+          <span class="chip">1 machine</span>
+        </div>
+        <div class="hl" style="text-align:left;max-width:480px">
+          ↓ navigate with ← → arrow keys, Space, or the taskbar below
+        </div>
+        <div class="uni-row" style="max-width:480px;width:100%">
+          <img class="polis-logo" width="34" height="43" src="data:image/png;base64,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" alt="Polis University">
+          <div>
+            <div class="uni-name">Polis University</div>
+            <div class="uni-prof">Supervised by: Hekuran Islamaj &amp; Melisa Tufa</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S2 · THE CONCEPT ════════════════════════════ -->
+<section class="slide" id="s2">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128196;&nbsp;readme.txt — Notepad</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner">
+        <div class="h2">What is this?</div>
+        <div class="hr"></div>
+        <p class="body">A university project: a fully interactive Windows 95 desktop simulation running entirely in the browser. Draggable windows, a working taskbar, a boot sequence, classic games, a paint app — built with React 19 and no UI libraries. The visitor does not browse a site — they <em>use</em> a machine.</p>
+        <div class="hl">"Every design decision follows from one question: does this feel like touching real plastic hardware?"</div>
+        <div class="hr"></div>
+        <div class="h2" style="margin-bottom:2px">Five commitments</div>
+        <div class="col" style="gap:4px">
+          <div class="body">→ Draggable, resizable windows — built from scratch, zero UI libraries</div>
+          <div class="body">→ Win95 bevel on every surface — four-layer border + inset shadow, no blur</div>
+          <div class="body">→ Zero border-radius — pixel-sharp is the contract, no exceptions</div>
+          <div class="body">→ IBM Plex Mono for the machine · IBM Plex Sans for the person</div>
+          <div class="body">→ 9 interactive applications, 172 tests, one self-contained experience</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S3 · TECH STACK ═════════════════════════════ -->
+<section class="slide" id="s3">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#9000;&nbsp;stack.cmd — Command Prompt</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="term-panel">
+<span style="color:#fff">Microsoft(R) Windows 95</span><br>
+<span style="color:#888">(C)Copyright Microsoft Corp 1981-1995</span><br><br>
+<span style="color:#fff">C:\WIN95\FEATURES&gt;</span> dir /stack<br><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">bundler</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vite 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// HMR, Rollup, ESM-native dev server</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">ui</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;React 19&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// concurrent features, no class components</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">router</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;React Router v7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// HashRouter — works on GitHub Pages</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">testing</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vitest 3 + jsdom&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// 172 tests, co-located with source</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">backend</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Vercel Functions&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// api/contact.js + api/visit.js</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">storage</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;localStorage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// notes, window + icon positions</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">audio</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Web Audio API&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// boot chime — zero network dependency</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">canvas</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Canvas 2D API&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// Paint tools + 3D starfield screensaver</span><br>
+&nbsp;&nbsp;<span style="color:#8be9fd">deploy</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;GitHub Pages&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">// static host, fragment routing</span><br><br>
+<span style="color:#fff">C:\WIN95\FEATURES&gt;</span> <span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S4 · ARCHITECTURE ════════════════════════════ -->
+<section class="slide" id="s4">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128193;&nbsp;architecture — System Explorer</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="arch">
+<span style="color:#fff">HashRouter</span><br>
+<span style="color:#6272a4">└─</span> <span style="color:#8be9fd">WindowStackProvider</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;├─</span> <span style="color:#50fa7b">RouterSync</span>&nbsp;&nbsp;<span style="color:#6272a4">← renderless URL bridge</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;├─</span> &lt;<span style="color:#f1fa8c">main</span>&gt; .desktop-area<br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├─</span> DesktopIcon × 9<br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">└─ drag + useIconPosition</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└─</span> Window × 9<br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">├─ Pointer Events drag</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">├─ computeResize (lib/)</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">└─ &lt;App Content /&gt;</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;├─</span> Taskbar<br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">├─ Start Menu</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">├─ window buttons (hidden Map)</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;</span><span style="color:#6272a4">└─ useClock → system tray</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;├─</span> BSOD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← Ctrl+Shift+B easter egg</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;├─</span> Screensaver<span style="color:#6272a4"> ← useInactivity 45s</span><br>
+<span style="color:#6272a4">&nbsp;&nbsp;&nbsp;└─</span> BootSequence<span style="color:#6272a4"> ← sessionStorage, once/tab</span>
+          </div>
+          <div class="col" style="gap:7px">
+            <div class="h2">Four architectural layers</div>
+            <div class="hl"><strong>Context</strong><br>WindowStackProvider owns global state: an ordered array (z-index = position in array) + three Sets/Maps for hidden, closed, maximized.</div>
+            <div class="hl"><strong>Components</strong><br>Thin wrappers. Read context, render JSX. No game logic, geometry, or API calls inline.</div>
+            <div class="hl"><strong>lib/</strong><br>Pure functions — no DOM access. Testable in isolation: computeResize, minesweeper, snake, bootChime.</div>
+            <div class="hl"><strong>hooks/</strong><br>Behavioral reuse — useClock, useInactivity, useWindowPosition, useIconPosition, useInView.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S5 · WINDOW ENGINE — ISLI ═══════════════════ -->
+<section class="slide" id="s5">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#9881;&nbsp;Window.jsx — Isli Basha · Project Lead &amp; Core Architecture</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Drag · Pointer Events API</div>
+            <div class="code">
+<span class="cm">// mouse events break when cursor exits element at speed</span><br>
+<span class="cm">// Pointer Events route ALL events to capturing element</span><br><br>
+<span class="var">el</span>.<span class="fn">setPointerCapture</span>(<span class="var">e</span>.<span class="var">pointerId</span>)<br><br>
+<span class="cm">// store in ref — NOT state — avoids 60 re-renders/sec</span><br>
+<span class="kw">const</span> <span class="var">dragState</span> = <span class="fn">useRef</span>({ <span class="var">startX</span>, <span class="var">startY</span>, <span class="var">ox</span>, <span class="var">oy</span> })<br>
+<span class="cm">// only call setOffset() when DOM actually needs to move</span>
+            </div>
+            <div class="h2" style="padding:2px 0">Z-Index · Array as implicit ordering</div>
+            <div class="code">
+<span class="cm">// order[] = array of window IDs</span><br>
+<span class="cm">// a window's z-index = its index in the array</span><br><br>
+<span class="kw">function</span> <span class="fn">bringToFront</span>(<span class="var">id</span>) {<br>
+&nbsp;&nbsp;<span class="kw">return</span> [...<span class="var">order</span>.<span class="fn">filter</span>(<span class="var">x</span> => <span class="var">x</span> !== <span class="var">id</span>), <span class="var">id</span>]<br>
+}<span class="cm"> // last element on top. always 0..n, no overflow</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">HashRouter · Why not BrowserRouter</div>
+            <div class="code">
+<span class="cm">// BrowserRouter: /projects → server must serve index.html</span><br>
+<span class="cm">// GitHub Pages has no rewrite rules → 404 on refresh</span><br><br>
+<span class="cm">// HashRouter: /#/projects → server only ever sees /</span><br>
+<span class="cm">// always serves index.html, browser handles fragment</span><br><br>
+<span class="cm">// RouterSync (renderless): reads hash on mount → open window</span><br>
+<span class="cm">// writes hash when window opens → every URL is deep-linkable</span>
+            </div>
+            <div class="hl">
+              <strong>minimize vs close</strong><br>
+              'hidden' Map: window stays in DOM, display:none — taskbar button persists. 'closed' Set: removed from render tree entirely. Reopening gives a clean slate — authentic Win95 feel.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S6 · PURE LOGIC PATTERN ═════════════════════ -->
+<section class="slide" id="s6">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128196;&nbsp;lib/ — Pure Logic Pattern</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">The rule: logic without DOM lives in lib/</div>
+            <div class="code">
+<span class="cm">// lib/resizeWindow.js — pure, testable, zero React</span><br>
+<span class="kw">export function</span> <span class="fn">computeResize</span>(<span class="var">edge</span>, <span class="var">start</span>, <span class="var">delta</span>) {<br>
+&nbsp;&nbsp;<span class="kw">const</span> <span class="var">w</span> = <span class="fn">Math.max</span>(<span class="num">MIN_W</span>, <span class="var">start</span>.<span class="var">w</span> + <span class="var">delta</span>.<span class="var">x</span>)<br>
+&nbsp;&nbsp;<span class="kw">const</span> <span class="var">h</span> = <span class="fn">Math.max</span>(<span class="num">MIN_H</span>, <span class="var">start</span>.<span class="var">h</span> + <span class="var">delta</span>.<span class="var">y</span>)<br>
+&nbsp;&nbsp;<span class="kw">return</span> { <span class="var">width</span>: <span class="var">w</span>, <span class="var">height</span>: <span class="var">h</span> }<br>
+}<span class="cm"> // unit-tested without mounting any component</span>
+            </div>
+            <div class="code">
+<span class="cm">// lib/minesweeper.js — board = 2D array of plain objects</span><br>
+<span class="fn">createBoard</span>() → <span class="ty">Board</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// empty grid, no mines yet</span><br>
+<span class="fn">revealCell</span>(<span class="var">b</span>,<span class="var">r</span>,<span class="var">c</span>) → <span class="ty">Board</span>&nbsp;<span class="cm">// plants mines on first call</span><br>
+<span class="fn">flagCell</span>(<span class="var">b</span>,<span class="var">r</span>,<span class="var">c</span>) → <span class="ty">Board</span>&nbsp;&nbsp;<span class="cm">// returns new state, no mutation</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Why this matters</div>
+            <div class="hl" style="margin-bottom:2px">"Keep logic that doesn't need the DOM out of components and into lib/" — Isli Basha</div>
+            <div class="col" style="gap:4px">
+              <div class="body">→ <strong>Faster tests</strong> — no component mount, no jsdom overhead, just data in → data out</div>
+              <div class="body">→ <strong>Parallel development</strong> — Isli built the window shell while Sidrit wrote game logic independently, zero coupling</div>
+              <div class="body">→ <strong>Easier to reason about</strong> — pure function: same input always gives same output, no hidden state</div>
+              <div class="body">→ <strong>Portable</strong> — game logic usable outside React without changes</div>
+            </div>
+            <div class="stat" style="margin-top:auto">
+              <div class="stat-n">lib/</div>
+              <div class="stat-l">resizeWindow · minesweeper · snake · bootChime · AppGlyph</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S7 · GAMES — SIDRIT ═════════════════════════ -->
+<section class="slide" id="s7">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#127918;&nbsp;games — Sidrit Halili · Games Developer &amp; Unit Testing Lead</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Minesweeper · Safe First Click</div>
+            <div class="code">
+<span class="cm">// createBoard() — empty grid, no mines placed yet</span><br>
+<span class="kw">function</span> <span class="fn">revealCell</span>(<span class="var">board</span>, <span class="var">r</span>, <span class="var">c</span>) {<br>
+&nbsp;&nbsp;<span class="kw">if</span> (!<span class="var">board</span>.<span class="var">minesPlanted</span>) {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// first click: plant mines, skip [r,c] + neighbors</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">board</span> = <span class="fn">plantMines</span>(<span class="var">board</span>, <span class="var">r</span>, <span class="var">c</span>)<br>
+&nbsp;&nbsp;}<br>
+&nbsp;&nbsp;<span class="cm">// flood-fill with iterative stack — not recursion</span><br>
+&nbsp;&nbsp;<span class="cm">// avoids RangeError on large open fields</span><br>
+&nbsp;&nbsp;<span class="kw">const</span> <span class="var">stack</span> = [[<span class="var">r</span>, <span class="var">c</span>]]<span class="cm"> // heap, no call-stack limit</span><br>
+&nbsp;&nbsp;<span class="kw">while</span> (<span class="var">stack</span>.<span class="var">length</span>) { <span class="cm">/* pop → check → push neighbors */</span> }<br>
+}
+            </div>
+            <div class="hl">The safe-start guarantee is entirely internal to lib/. The caller never has to think about it.</div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Snake · Stale Closure &amp; Direction</div>
+            <div class="code">
+<span class="cm">// turn() rejects if new dir is opposite of current</span><br>
+<span class="cm">// prevents instant self-reversal death (feels unfair)</span><br><br>
+<span class="cm">// Stale closure problem:</span><br>
+<span class="cm">// setGame(tick(game)) — 'game' is always initial value</span><br>
+<span class="cm">// because setInterval closes over it at creation time</span><br><br>
+<span class="cm">// Fix: functional updater — React gives latest state</span><br>
+<span class="fn">setGame</span>(<span class="var">g</span> => <span class="fn">tick</span>(<span class="var">g</span>))
+            </div>
+            <div class="col" style="gap:4px;margin-top:4px">
+              <div class="body">→ Logic written and unit-tested <em>before</em> any JSX was opened</div>
+              <div class="body">→ Components are thin wrappers: mount → tick interval → keydown → render projection of lib state</div>
+              <div class="body">→ His lib files account for most of the 172 tests in the suite</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S8 · CANVAS — SERXHIO ═══════════════════════ -->
+<section class="slide" id="s8">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#127912;&nbsp;canvas — Serxhio Lekgegaj · Pixels, Visual Effects &amp; SVG</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Paint · BFS Flood Fill + Snapshot Preview</div>
+            <div class="code">
+<span class="cm">// BFS on the raw pixel buffer (Uint8ClampedArray)</span><br>
+<span class="cm">// getImageData → read target RGBA → push coord → loop</span><br>
+<span class="cm">// overwrite matching pixels, push 4 neighbors, putImageData</span><br>
+<span class="cm">// guard: clicked pixel = fill color → return immediately</span><br><br>
+<span class="cm">// Live preview for line / rect / ellipse:</span><br>
+<span class="var">ctx</span>.<span class="fn">getImageData</span>()&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// save snapshot on mousedown</span><br>
+<span class="var">ctx</span>.<span class="fn">putImageData</span>(<span class="var">snap</span>)&nbsp;<span class="cm">// restore on every mousemove</span><br>
+<span class="cm">// simpler than a second overlay canvas</span>
+            </div>
+            <div class="h2" style="padding:2px 0">BSOD · useEffect timing</div>
+            <div class="code">
+<span class="cm">// Trigger + dismiss in SEPARATE useEffect calls</span><br>
+<span class="cm">// dismiss listener added only when visible becomes true</span><br>
+<span class="cm">// → triggering keydown has already propagated by then</span><br>
+<span class="cm">// modifier keys (Ctrl/Shift/Alt/Meta) filtered via Set</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Screensaver · 3D Starfield</div>
+            <div class="code">
+<span class="cm">// Each star: (x, y, z). z decreases each frame.</span><br><br>
+<span class="cm">// Perspective projection:</span><br>
+<span class="var">sx</span> = <span class="var">cx</span> + (<span class="var">x</span> * <span class="num">FOCAL</span>) / <span class="var">z</span>&nbsp;&nbsp;<span class="cm">// screen x</span><br>
+<span class="var">sy</span> = <span class="var">cy</span> + (<span class="var">y</span> * <span class="num">FOCAL</span>) / <span class="var">z</span>&nbsp;&nbsp;<span class="cm">// screen y</span><br>
+<span class="cm">// as z → 0, star rushes toward viewer</span><br>
+<span class="cm">// store prev z (pz): draw line prev→current = streak</span><br>
+<span class="cm">// cancelAnimationFrame on cleanup — no memory leaks</span>
+            </div>
+            <div class="hl" style="margin-top:4px">
+              <strong>SVG icons:</strong> all 15 glyphs in one AppGlyph component switching on a 'kind' prop. shapeRendering="crispEdges" for pixel-faithful 18×18 icons. One file — the entire icon vocabulary in one scroll.
+            </div>
+            <div class="body" style="margin-top:4px">→ Every animation respects <code>prefers-reduced-motion</code> — added proactively across Paint, Screensaver, and BootSequence</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S9 · DATA LAYER — HELENA ════════════════════ -->
+<section class="slide" id="s9">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128200;&nbsp;data — Helena Petro · Data Layer, CRUD &amp; API</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Notes · Auto-save CRUD</div>
+            <div class="code">
+<span class="cm">// All state at component level — no context needed</span><br>
+<span class="cm">// Notes are local; no other component cares about them</span><br><br>
+<span class="cm">// Single useEffect handles all persistence:</span><br>
+<span class="fn">useEffect</span>(() => { <span class="fn">saveNotes</span>(<span class="var">notes</span>) }, [<span class="var">notes</span>])<br>
+<span class="cm">// fires after every render → auto-save on each keystroke</span><br><br>
+<span class="cm">// Note shape:</span><br>
+<span class="cm">// { id: crypto.randomUUID(), title, body, updatedAt }</span><br>
+<span class="cm">// sorted by updatedAt — most recently edited at top</span>
+            </div>
+            <div class="h2" style="padding:2px 0">Namespaced LocalStorage convention</div>
+            <div class="code">
+<span class="str">'win95-notes'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Notes array</span><br>
+<span class="str">'win95:positions:v1'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// window positions</span><br>
+<span class="str">'win95:icon-positions:v1'</span>&nbsp;&nbsp;<span class="cm">// icon positions</span><br>
+<span class="cm">// versioned keys prevent silent schema collisions</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">API · Vercel Serverless Functions</div>
+            <div class="code">
+<span class="cm">// api/contact.js — POST handler</span><br>
+<span class="cm">// validate body client-side AND server-side</span><br>
+<span class="cm">// client validation can be bypassed — server must validate too</span><br>
+<span class="cm">// demo branch: stubbed to {ok:true}, real flow in place</span><br><br>
+<span class="cm">// api/visit.js — visitor counter</span><br>
+<span class="cm">// real: Upstash Redis REST API</span><br>
+<span class="cm">// demo: hook returns 1995 (Easter egg)</span><br>
+<span class="cm">// component never changed — hook hides the detail</span>
+            </div>
+            <div class="col" style="gap:4px;margin-top:4px">
+              <div class="body">→ <strong>ContactExe</strong>: inbox is hardcoded mock (Bill Gates, Tech Support) but outgoing form hits the real API — deliberate design choice</div>
+              <div class="body">→ <strong>Data files tested</strong>: projects.test.js asserts every entry has title, description, url — catches malformed entries at CI time, not in a live demo</div>
+              <div class="body">→ <strong>Data-first</strong>: agree shape → write test → fill data</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S10 · SYSTEM UX — AKSEL ════════════════════ -->
+<section class="slide" id="s10">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#9203;&nbsp;system — Aksel Mana · Hooks, Boot &amp; Test Infrastructure</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col">
+            <div class="h2" style="padding:2px 0">useClock · Minute-aligned, no drift</div>
+            <div class="code">
+<span class="cm">// setInterval(tick, 60000) at 14:23:47</span><br>
+<span class="cm">// → next fire: 14:24:47 (47 seconds past the minute — wrong)</span><br><br>
+<span class="cm">// Fix: align to next minute boundary with a one-shot timeout</span><br>
+<span class="kw">const</span> <span class="var">msUntil</span> = (<span class="num">60</span> - <span class="var">sec</span>) * <span class="num">1000</span> - <span class="var">ms</span><br>
+<span class="fn">setTimeout</span>(() => {<br>
+&nbsp;&nbsp;<span class="fn">tick</span>()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// immediate update</span><br>
+&nbsp;&nbsp;<span class="fn">setInterval</span>(<span class="var">tick</span>, <span class="num">60_000</span>)&nbsp;&nbsp;&nbsp;<span class="cm">// fires exactly at :00</span><br>
+}, <span class="var">msUntil</span>)
+            </div>
+            <div class="h2" style="padding:2px 0">useInactivity · Passive listeners</div>
+            <div class="code">
+<span class="cm">// 5 events: mousemove keydown pointerdown scroll touchstart</span><br>
+<span class="cm">// all registered {passive:true} — browser can scroll freely</span><br>
+<span class="cm">// on each event: clearTimeout + restart 45s timer</span><br>
+<span class="cm">// on timeout: screensaver activates</span>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">BootSequence · Three phases</div>
+            <div class="col" style="gap:4px">
+              <div class="body">→ BIOS text output → memory check animation → Windows 95 splash</div>
+              <div class="body">→ Plays once per tab via <strong>sessionStorage</strong> — not localStorage (new tab = new boot)</div>
+              <div class="body">→ Skips entirely on prefers-reduced-motion — added proactively</div>
+            </div>
+            <div class="h2" style="padding:4px 0 2px">bootChime · Web Audio API</div>
+            <div class="code">
+<span class="cm">// Audio file = network fetch, can arrive late, timing broken</span><br>
+<span class="cm">// Web Audio: oscillator + gain envelope, synthesized instantly</span><br>
+<span class="cm">// zero network dependency, zero latency, no binary assets</span><br>
+<span class="cm">// synthetic sound fits the 8-bit aesthetic anyway</span>
+            </div>
+            <div class="hl" style="margin-top:4px">
+              Aksel's first task: configure Vitest + jsdom + localStorage mocks. This unblocked Sidrit, Helena, and Isli in parallel before a single component existed.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S11 · TESTING ═══════════════════════════════ -->
+<section class="slide" id="s11">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#9989;&nbsp;vitest — Test Suite</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:4px">
+        <div class="g2" style="height:100%;gap:6px">
+          <div class="col" style="justify-content:center;align-items:stretch;gap:10px">
+            <div class="stat">
+              <div class="stat-n">172</div>
+              <div class="stat-l">tests passing · Vitest 3 + jsdom</div>
+            </div>
+            <div class="g2" style="gap:8px">
+              <div class="stat">
+                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">lib/</div>
+                <div class="stat-l">pure function tests — no DOM</div>
+              </div>
+              <div class="stat">
+                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">.jsx</div>
+                <div class="stat-l">component render + fire events</div>
+              </div>
+            </div>
+            <div class="g2" style="gap:8px">
+              <div class="stat">
+                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">data/</div>
+                <div class="stat-l">shape validation per entry</div>
+              </div>
+              <div class="stat">
+                <div class="stat-n" style="font-size:clamp(1rem,2.5vw,1.6rem)">hooks</div>
+                <div class="stat-l">behavior without component</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">Co-location pattern</div>
+            <div class="arch" style="font-size:.7rem;line-height:1.8;flex:0;padding:10px 14px">
+<span style="color:#8be9fd">src/lib/</span><br>
+&nbsp;&nbsp;minesweeper.js&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← logic</span><br>
+&nbsp;&nbsp;minesweeper.test.js&nbsp;<span style="color:#6272a4">← tests live next to it</span><br>
+&nbsp;&nbsp;snake.js · snake.test.js<br>
+<br>
+<span style="color:#8be9fd">src/components/</span><br>
+&nbsp;&nbsp;Minesweeper.jsx<br>
+&nbsp;&nbsp;Minesweeper.test.jsx<br>
+<br>
+<span style="color:#8be9fd">src/data/</span><br>
+&nbsp;&nbsp;projects.js<br>
+&nbsp;&nbsp;projects.test.js&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← shape validation</span><br>
+<br>
+<span style="color:#8be9fd">src/test/setup.js</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#6272a4">← Aksel's foundation</span>
+            </div>
+            <div class="col" style="gap:4px;margin-top:4px">
+              <div class="body">→ Sidrit drove the culture — most of the 172 tests trace back to his lib files</div>
+              <div class="body">→ Aksel wrote setup.js first, unblocking all other test authors in parallel</div>
+              <div class="body">→ Data shape tests catch malformed entries at CI time, not during a live demo</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S12 · THE TEAM ══════════════════════════════ -->
+<section class="slide" id="s12">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#128101;&nbsp;team — Credits</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner">
+        <div class="h2" style="margin-bottom:6px">Five engineers · One machine</div>
+        <div class="col" style="gap:5px;flex:1">
+          <div class="ac">
+            <div class="ac-name">Isli Basha</div>
+            <div class="ac-role">Project Lead · Core Architecture · Window System</div>
+            <div class="ac-key">Window engine (Pointer Events drag, z-index array), WindowStack context, RouterSync deep-linking, Vite + React 19 project setup and folder layout the whole team followed</div>
+          </div>
+          <div class="ac">
+            <div class="ac-name">Sidrit Halili</div>
+            <div class="ac-role">Games Developer · Pure Logic · Unit Testing Lead</div>
+            <div class="ac-key">Minesweeper (safe-first-click, iterative flood-fill), Snake (direction validation, functional updater), set the testing culture — his lib files account for most of the 172 tests</div>
+          </div>
+          <div class="ac">
+            <div class="ac-name">Serxhio Lekgegaj</div>
+            <div class="ac-role">Canvas &amp; Visual Effects · Easter Eggs · SVG System</div>
+            <div class="ac-key">Paint (6 tools, BFS flood-fill, snapshot-restore preview), Screensaver (3D starfield projection), BSOD easter egg, 15 pixel-faithful 18×18 SVG icons — every effect respects prefers-reduced-motion</div>
+          </div>
+          <div class="ac">
+            <div class="ac-name">Helena Petro</div>
+            <div class="ac-role">Data Layer · CRUD Apps · Forms &amp; API Endpoints</div>
+            <div class="ac-key">Notes CRUD (auto-save useEffect), ContactExe (mock inbox + real API), two Vercel serverless functions, namespaced localStorage convention, data shape tests</div>
+          </div>
+          <div class="ac">
+            <div class="ac-name">Aksel Mana</div>
+            <div class="ac-role">System UX · Custom Hooks · Boot Experience · Test Infrastructure</div>
+            <div class="ac-key">BootSequence (3 phases, sessionStorage, Web Audio chime), useClock (minute-aligned), useInactivity (passive listeners), Vitest config that unblocked the whole team before a component existed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S13 · CLOSING ════════════════════════════════ -->
+<section class="slide" id="s13">
+  <div class="sticky">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
+      <div class="sticky-name">win95 Desktop<br>Simulation</div>
+      <img class="polis-logo" width="42" height="53" style="margin-top:4px;opacity:.85" src="data:image/png;base64,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" alt="Polis University">
+    </div>
+    <div class="sticky-role" style="margin-top:6px">Polis University · win95-demo</div>
+    <div style="font-family:var(--mono);font-size:.65rem;color:var(--chrome-darker);margin-top:3px">Supervised by: Hekuran Islamaj &amp; Melisa Tufa</div>
+    <div class="sticky-body">
+      Not a retro skin over a static page.<br>
+      A fully interactive desktop environment — running in your browser.<br><br>
+      Five engineers. Nine applications. 172 tests.<br>
+      One browser. Zero UI libraries. Zero border-radius.<br><br>
+      <em>"Does this feel like touching real plastic hardware?"</em>
+    </div>
+    <div class="sticky-hint">← / → arrow keys · Space to advance · Home to restart</div>
+  </div>
+</section>
+
+</div><!-- /deck -->
+
+<!-- ══ TASKBAR ══════════════════════════════════════ -->
+<nav id="taskbar" aria-label="Presentation navigation">
+  <button class="tb-start" id="tb-start">&#9084; Start</button>
+  <button class="tb-btn" id="btn-prev" aria-label="Previous slide" title="Previous (←)">&#9664;</button>
+  <div class="tb-prog" role="progressbar" aria-label="Slide progress" aria-valuenow="1" aria-valuemin="1" aria-valuemax="13">
+    <div class="tb-prog-fill" id="prog-fill" style="width:0%"></div>
+  </div>
+  <button class="tb-btn" id="btn-next" aria-label="Next slide" title="Next (→ / Space)">&#9654;</button>
+  <div class="tb-counter" id="counter">1 / 13</div>
+  <div class="tb-clock" id="clock">00:00</div>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  const slides = [...document.querySelectorAll('.slide')];
+  const total  = slides.length;
+  let   cur    = 0;
+  let   busy   = false;
+
+  // ── init ──────────────────────────────────────────
+  slides[0].classList.add('visible');
+  updateUI();
+  tickClock();
+  setInterval(tickClock, 15000);
+
+  // ── navigation ────────────────────────────────────
+  function go(idx) {
+    if (busy || idx < 0 || idx >= total || idx === cur) return;
+    busy = true;
+
+    const dir  = idx > cur ? 1 : -1;
+    const old  = slides[cur];
+    const next = slides[idx];
+
+    // immediately remove visible from old (no animation, just hide)
+    old.classList.remove('visible');
+    old.style.transition = 'none';
+    old.style.opacity    = '0';
+    old.style.transform  = '';
+
+    // position next off-screen, show it
+    next.style.transition = 'none';
+    next.style.transform  = 'translateX(' + (dir * 100) + '%)';
+    next.style.opacity    = '1';
+    next.classList.add('visible');
+
+    // force layout recalc so the starting position is applied
+    next.getBoundingClientRect();
+
+    // animate next into position
+    next.style.transition = 'transform 360ms cubic-bezier(0.2,0.8,0.25,1)';
+    next.style.transform  = 'translateX(0)';
+
+    cur = idx;
+    updateUI();
+
+    setTimeout(function () {
+      // clean up inline styles so CSS takes over
+      old.style.transition  = '';
+      old.style.opacity     = '';
+      old.style.transform   = '';
+      next.style.transition = '';
+      next.style.transform  = '';
+      busy = false;
+    }, 400);
+  }
+
+  function next() { go(cur + 1); }
+  function prev() { go(cur - 1); }
+
+  // ── ui ────────────────────────────────────────────
+  function updateUI() {
+    document.getElementById('counter').textContent = (cur + 1) + ' / ' + total;
+    var pct = total > 1 ? Math.round((cur / (total - 1)) * 100) : 100;
+    var fill = document.getElementById('prog-fill');
+    fill.style.width = pct + '%';
+    var pb = fill.parentElement;
+    pb.setAttribute('aria-valuenow', cur + 1);
+  }
+
+  function tickClock() {
+    var d = new Date();
+    var h = String(d.getHours()).padStart(2, '0');
+    var m = String(d.getMinutes()).padStart(2, '0');
+    document.getElementById('clock').textContent = h + ':' + m;
+  }
+
+  // ── event listeners ───────────────────────────────
+  document.getElementById('btn-next').addEventListener('click', next);
+  document.getElementById('btn-prev').addEventListener('click', prev);
+  document.getElementById('tb-start').addEventListener('click', function () { go(0); });
+
+  document.addEventListener('keydown', function (e) {
+    switch (e.key) {
+      case 'ArrowRight': case ' ':      e.preventDefault(); next(); break;
+      case 'ArrowLeft':                 e.preventDefault(); prev(); break;
+      case 'ArrowDown':                 e.preventDefault(); next(); break;
+      case 'ArrowUp':                   e.preventDefault(); prev(); break;
+      case 'Home':                      e.preventDefault(); go(0);  break;
+      case 'End':                       e.preventDefault(); go(total - 1); break;
+      case 'PageDown':                  e.preventDefault(); next(); break;
+      case 'PageUp':                    e.preventDefault(); prev(); break;
+    }
+  });
+
+  // touch swipe
+  var tsx = 0;
+  document.addEventListener('touchstart', function (e) {
+    tsx = e.touches[0].clientX;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - tsx;
+    if (Math.abs(dx) > 50) { if (dx < 0) next(); else prev(); }
+  });
+
+  // mouse wheel (throttled)
+  var lastWheel = 0;
+  document.addEventListener('wheel', function (e) {
+    var now = Date.now();
+    if (now - lastWheel < 700) return;
+    lastWheel = now;
+    if (e.deltaY > 0) next(); else prev();
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
