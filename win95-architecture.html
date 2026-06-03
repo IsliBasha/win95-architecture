@@ -419,15 +419,16 @@ body::before{
 /* ── S1 ABOUT DIALOG ──────────────────────────────── */
 .s1-about{display:flex;flex-direction:row;flex:1;min-height:0;overflow:hidden}
 .s1-banner{
-  width:clamp(100px,16vw,148px);flex-shrink:0;
+  width:clamp(124px,18vw,160px);flex-shrink:0;
   background:linear-gradient(170deg,var(--tb-to) 0%,var(--tb-from) 55%,#001a5c 100%);
   display:flex;flex-direction:column;justify-content:flex-end;
-  padding:clamp(8px,1.4vw,13px);
+  padding:clamp(8px,1.4vw,13px);overflow:hidden;
 }
 .s1-banner-title{
-  font-family:var(--mono);font-size:clamp(1rem,2.3vw,1.65rem);
-  font-weight:700;letter-spacing:-0.02em;line-height:1.05;
+  font-family:var(--mono);font-size:clamp(.78rem,1.55vw,1.12rem);
+  font-weight:700;letter-spacing:-0.02em;line-height:1.1;
   color:rgba(255,255,255,.96);text-shadow:1px 1px 0 rgba(0,0,0,.4);
+  word-break:keep-all;
 }
 .s1-banner-sub{
   font-family:var(--mono);font-size:clamp(.5rem,.74vw,.62rem);
