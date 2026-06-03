@@ -500,7 +500,15 @@ body::before{
 }
 .c1{color:#0000cc}.c2{color:#007700}.c3{color:#cc0000}.c4{color:#000088}
 
-/* ── FLOW DIAGRAM (S9) ────────────────────────────── */
+/* ── REQUIREMENTS SLIDE (S4) ────────────────────── */
+.req-list{display:flex;flex-direction:column;gap:5px}
+.req-item{display:flex;gap:7px;align-items:flex-start;font-size:clamp(.66rem,1vw,.78rem);line-height:1.3}
+.req-ck{color:#008000;font-weight:700;flex-shrink:0;margin-top:.1em;font-size:1.05em}
+.req-alt{color:#b86800;font-weight:700;flex-shrink:0;margin-top:.1em;font-size:1.05em}
+.req-label{font-weight:700;color:var(--ink);margin-bottom:2px}
+.req-proof{color:#555;font-size:.88em;line-height:1.25}
+
+/* ── FLOW DIAGRAM (S10) ────────────────────────────── */
 .flow-row{display:flex;align-items:stretch;gap:0;flex-shrink:0}
 .flow-box{
   flex:1;padding:5px 8px;text-align:center;color:var(--ink);line-height:1.45;
@@ -672,8 +680,99 @@ body::before{
   </div>
 </section>
 
-<!-- ══ S4 · ARCHITECTURE ════════════════════════════ -->
+<!-- ══ S4 · REQUIREMENTS ════════════════════════════ -->
 <section class="slide" id="s4">
+  <div class="win bv-out win-shad">
+    <div class="win-title">
+      <span>&#9998;&nbsp;requirements.txt — What we had to build</span>
+      <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
+    </div>
+    <div class="win-body">
+      <div class="win-inner" style="padding:clamp(6px,1.2vw,12px);gap:6px">
+        <div class="h2">Project Requirements &amp; How We Met Them</div>
+        <div class="g2" style="height:calc(100% - 28px);gap:14px">
+          <div class="col req-list">
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">5+ React Components</div>
+                <div class="req-proof">9 independent windows — Projects, Notes, mail.exe, Minesweeper, Snake, Paint, readme.txt, cmd, iexplore.exe — each a self-contained component with its own state</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">useState &amp; useEffect</div>
+                <div class="req-proof">useState: drag coords, z-index focus, open/close state, game board, note list — useEffect: localStorage sync on every keystroke, clock tick every second, 45s screensaver idle timer</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">Form for Data Input</div>
+                <div class="req-proof">Notes.jsx: title + body controlled inputs — mail.exe: name, email, message → validated client &amp; server side → api/contact.js → Discord webhook</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">Data Listing</div>
+                <div class="req-proof">Notes: sorted by updatedAt, most recent first — Projects.exe: 4 GitHub repo cards from projects.js — cmd: dir command renders the tech stack as terminal rows</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">CRUD — Notes.exe</div>
+                <div class="req-proof"><strong>Create</strong> new note → <strong>Read</strong> all on mount → <strong>Update</strong> title/body live → <strong>Delete</strong> by id — all changes serialized to LocalStorage automatically</div>
+              </div>
+            </div>
+          </div>
+          <div class="col req-list">
+            <div class="req-item">
+              <span class="req-alt">~</span>
+              <div>
+                <div class="req-label">Navigation <span style="font-weight:400;color:#888">(custom, no React Router)</span></div>
+                <div class="req-proof">Window manager handles navigation: taskbar buttons open/close apps, z-index stack controls focus, drag positions persist in localStorage — same user model, zero routing dependency</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">Data Storage</div>
+                <div class="req-proof">LocalStorage: <span class="str">'win95-notes'</span>, <span class="str">'win95:positions:v1'</span>, <span class="str">'win95:icon-positions:v1'</span> — Vercel API: api/contact.js serverless function (real delivery)</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">Clean &amp; Understandable UI</div>
+                <div class="req-proof">0 UI libraries — Win95 4-layer bevel system — IBM Plex Mono typography — CRT scanline overlay — custom SVG icons — every element maps to a real Windows 95 equivalent</div>
+              </div>
+            </div>
+            <div class="hr"></div>
+            <div class="req-item">
+              <span class="req-ck">✓</span>
+              <div>
+                <div class="req-label">Clean Project Structure</div>
+                <div class="req-proof">src/components/ one file per window — src/data/ static arrays + shape tests — src/hooks/ shared logic — src/styles/ design tokens as CSS custom properties — src/lib/ pure functions, zero DOM</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S5 · ARCHITECTURE ════════════════════════════ -->
+<section class="slide" id="s5">
   <div class="win bv-out win-shad">
     <div class="win-title">
       <span>&#128193;&nbsp;architecture — System Explorer</span>
@@ -714,8 +813,8 @@ body::before{
   </div>
 </section>
 
-<!-- ══ S5 · WINDOW ENGINE — ISLI ═══════════════════ -->
-<section class="slide s-author" id="s5">
+<!-- ══ S6 · WINDOW ENGINE — ISLI ════════════════════ -->
+<section class="slide s-author" id="s6">
   <div class="author-crown">Isli Basha</div>
   <div class="author-sub">Project Lead · Window Engine · Core Architecture</div>
   <div class="win bv-out win-shad">
@@ -778,8 +877,8 @@ body::before{
   </div>
 </section>
 
-<!-- ══ S6 · PURE LOGIC PATTERN ═════════════════════ -->
-<section class="slide" id="s6">
+<!-- ══ S7 · PURE LOGIC PATTERN ══════════════════════ -->
+<section class="slide" id="s7">
   <div class="win bv-out win-shad">
     <div class="win-title">
       <span>&#128196;&nbsp;lib/ — Pure Logic Pattern</span>
@@ -831,8 +930,8 @@ body::before{
   </div>
 </section>
 
-<!-- ══ S7 · GAMES — SIDRIT ═════════════════════════ -->
-<section class="slide s-author" id="s7">
+<!-- ══ S8 · GAMES — SIDRIT ══════════════════════════ -->
+<section class="slide s-author" id="s8">
   <div class="author-crown">Sidrit Halili</div>
   <div class="author-sub">Games Developer · Pure Logic · Unit Testing Lead</div>
   <div class="win bv-out win-shad">
@@ -886,8 +985,8 @@ body::before{
   </div>
 </section>
 
-<!-- ══ S8 · CANVAS — SERXHIO ═══════════════════════ -->
-<section class="slide s-author" id="s8">
+<!-- ══ S9 · CANVAS — SERXHIO ════════════════════════ -->
+<section class="slide s-author" id="s9">
   <div class="author-crown">Serxhio Lekgegaj</div>
   <div class="author-sub">Canvas · Visual Effects · Easter Eggs · SVG System</div>
   <div class="win bv-out win-shad">
@@ -952,8 +1051,8 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   </div>
 </section>
 
-<!-- ══ S9 · DATA LAYER — HELENA ════════════════════ -->
-<section class="slide s-author" id="s9">
+<!-- ══ S10 · DATA LAYER — HELENA ═══════════════════ -->
+<section class="slide s-author" id="s10">
   <div class="author-crown">Helena Petro</div>
   <div class="author-sub">Data Layer · Notes CRUD · Forms &amp; API</div>
   <div class="win bv-out win-shad">
@@ -1008,8 +1107,8 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   </div>
 </section>
 
-<!-- ══ S10 · SYSTEM UX — AKSEL ════════════════════ -->
-<section class="slide s-author" id="s10">
+<!-- ══ S11 · SYSTEM UX — AKSEL ════════════════════ -->
+<section class="slide s-author" id="s11">
   <div class="author-crown">Aksel Mana</div>
   <div class="author-sub">Hooks · Boot Experience · Test Infrastructure</div>
   <div class="win bv-out win-shad">
@@ -1075,8 +1174,8 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   </div>
 </section>
 
-<!-- ══ S11 · TESTING ═══════════════════════════════ -->
-<section class="slide" id="s11">
+<!-- ══ S12 · TESTING ═══════════════════════════════ -->
+<section class="slide" id="s12">
   <div class="win bv-out win-shad">
     <div class="win-title">
       <span>&#9989;&nbsp;vitest — Test Suite</span>
@@ -1105,8 +1204,8 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   </div>
 </section>
 
-<!-- ══ S12 · THE TEAM ══════════════════════════════ -->
-<section class="slide" id="s12">
+<!-- ══ S13 · THE TEAM ══════════════════════════════ -->
+<section class="slide" id="s13">
   <div class="win bv-out win-shad">
     <div class="win-title">
       <span>&#128101;&nbsp;team — Credits</span>
@@ -1147,8 +1246,8 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   </div>
 </section>
 
-<!-- ══ S13 · CLOSING ════════════════════════════════ -->
-<section class="slide" id="s13">
+<!-- ══ S14 · CLOSING ════════════════════════════════ -->
+<section class="slide" id="s14">
   <div class="sticky">
     <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px">
       <div class="sticky-name">win95 Desktop<br>Simulation</div>
@@ -1248,7 +1347,7 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
           container.appendChild(div);
         });
       }
-      document.querySelectorAll('#s11 .s11-bullet').forEach(function(b){b.style.opacity='1';b.style.transform='none';});
+      document.querySelectorAll('#s12 .s11-bullet').forEach(function(b){b.style.opacity='1';b.style.transform='none';});
       return;
     }
     var start = null;
@@ -1292,7 +1391,7 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
       }, i * 30);
     });
     var treeDelay = S11_LINES.length * 30 + 60;
-    document.querySelectorAll('#s11 .s11-bullet').forEach(function(b, i) {
+    document.querySelectorAll('#s12 .s11-bullet').forEach(function(b, i) {
       setTimeout(function() { b.style.opacity='1'; b.style.transform='none'; }, treeDelay + i*100);
     });
   }
@@ -1302,7 +1401,7 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
     if (counterEl) counterEl.textContent = '0';
     var container = document.getElementById('s11-tree');
     if (container) container.innerHTML = '';
-    document.querySelectorAll('#s11 .s11-bullet').forEach(function(b) {
+    document.querySelectorAll('#s12 .s11-bullet').forEach(function(b) {
       b.style.opacity='0'; b.style.transform='translateY(4px)';
     });
   }
