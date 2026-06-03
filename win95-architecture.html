@@ -622,7 +622,7 @@ body::before{
         <div class="s2-grid">
           <div class="app-tile"><div class="app-tile-tb">&#128193;&nbsp;Projects.exe</div><div class="app-tile-body">&#128194;</div></div>
           <div class="app-tile"><div class="app-tile-tb">&#128196;&nbsp;readme.txt</div><div class="app-tile-body">&#128221;</div></div>
-          <div class="app-tile"><div class="app-tile-tb">&#9993;&nbsp;email.exe</div><div class="app-tile-body">&#9993;</div></div>
+          <div class="app-tile"><div class="app-tile-tb">&#9993;&nbsp;mail.exe</div><div class="app-tile-body">&#9993;</div></div>
           <div class="app-tile"><div class="app-tile-tb">&#9000;&nbsp;stack.cmd</div><div class="app-tile-body" style="background:var(--term);color:var(--phosphor);font-family:var(--mono);font-size:.7rem;letter-spacing:.04em">C:\&gt;_</div></div>
           <div class="app-tile"><div class="app-tile-tb">&#128163;&nbsp;Minesweeper</div><div class="app-tile-body">&#128163;</div></div>
           <div class="app-tile"><div class="app-tile-tb">&#128013;&nbsp;Snake.exe</div><div class="app-tile-body">&#128013;</div></div>
@@ -991,13 +991,13 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
             <div class="code">
 <span class="cm">// api/contact.js — validates on server AND client</span><br>
 <span class="cm">// client validation can be bypassed — server must also check</span><br><br>
-<span class="cm">// api/visit.js — visitor counter</span><br>
-<span class="cm">// real branch: Upstash Redis REST API</span><br>
-<span class="cm">// demo branch: hook returns 1995 (Easter egg)</span><br>
-<span class="cm">// component never changed — the hook hides the detail</span>
+<span class="cm">// form POST → Vercel Function → Discord webhook</span><br>
+<span class="cm">// three controlled inputs: name, email, message</span><br>
+<span class="cm">// validation runs client-side, then again server-side</span><br>
+<span class="cm">// demo branch: api returns {ok:true} but flow is real</span>
             </div>
             <div class="col" style="gap:4px;margin-top:4px">
-              <div class="body">→ <strong>ContactExe inbox</strong> is a hardcoded mock (Bill Gates, Tech Support) — but the outgoing form hits the real API. Deliberate: demo data, real delivery.</div>
+              <div class="body">→ <strong>mail.exe inbox</strong> is a hardcoded mock (Bill Gates, Tech Support) — but the outgoing form hits the real API. Deliberate: demo data, real delivery.</div>
               <div class="body">→ <strong>projects.test.js</strong> asserts every entry has title, description, url. Catches malformed data at CI time, not during a live presentation.</div>
               <div class="body">→ <strong>Data-first workflow:</strong> agree on the shape → write the test → fill in the real data</div>
             </div>
