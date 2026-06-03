@@ -1198,7 +1198,10 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   let   busy   = false;
 
   // ── init ──────────────────────────────────────────
-  slides[0].classList.add('visible');
+  // Don't show S1 yet if the BIOS boot is present — runS1Bsod will reveal it
+  if (!document.getElementById('bios-boot')) {
+    slides[0].classList.add('visible');
+  }
   updateUI();
   tickClock();
   setInterval(tickClock, 15000);
@@ -1361,13 +1364,14 @@ sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
   // ── s1 bsod flash ─────────────────────────────────
   window.runS1Bsod = function () {
     var el = document.getElementById('s1-bsod');
-    if (!el) return;
+    if (!el) { slides[0].classList.add('visible'); return; }
     el.style.display = 'flex';
     setTimeout(function () {
       el.classList.add('bsod-out');
       setTimeout(function () {
         el.style.display = 'none';
         el.classList.remove('bsod-out');
+        slides[0].classList.add('visible');
       }, 400);
     }, 1800);
   };
