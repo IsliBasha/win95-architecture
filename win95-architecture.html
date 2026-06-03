@@ -401,44 +401,203 @@ body::before{
 #bios-boot.fade-out{opacity:0;pointer-events:none}
 .bios-b{color:#ffffff}
 .bios-ok{color:#aaaaaa}
+
+/* ── S1 BSOD FLASH ────────────────────────────────── */
+#s1-bsod{
+  position:fixed;inset:0;
+  background:var(--panic);color:#fff;
+  font-family:var(--mono);font-size:clamp(.76rem,1.1vw,.92rem);
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;line-height:2.2;
+  z-index:99997;padding:clamp(20px,5vw,80px);
+  transition:opacity 360ms ease-out;
+}
+#s1-bsod.bsod-out{opacity:0;pointer-events:none}
+.bsod-stop{font-size:clamp(.8rem,1.25vw,1.05rem);font-weight:700;letter-spacing:.04em}
+.bsod-dim{opacity:.72;font-size:clamp(.66rem,.96vw,.8rem)}
+
+/* ── S1 ABOUT DIALOG ──────────────────────────────── */
+.s1-about{display:flex;flex-direction:row;flex:1;min-height:0;overflow:hidden}
+.s1-banner{
+  width:clamp(100px,16vw,148px);flex-shrink:0;
+  background:linear-gradient(170deg,var(--tb-to) 0%,var(--tb-from) 55%,#001a5c 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(8px,1.4vw,13px);
+}
+.s1-banner-title{
+  font-family:var(--mono);font-size:clamp(1rem,2.3vw,1.65rem);
+  font-weight:700;letter-spacing:-0.02em;line-height:1.05;
+  color:rgba(255,255,255,.96);text-shadow:1px 1px 0 rgba(0,0,0,.4);
+}
+.s1-banner-sub{
+  font-family:var(--mono);font-size:clamp(.5rem,.74vw,.62rem);
+  color:rgba(255,255,255,.58);margin-top:4px;letter-spacing:.02em;
+}
+.s1-right{
+  flex:1;min-width:0;display:flex;flex-direction:column;
+  gap:clamp(4px,.9vw,8px);padding:clamp(8px,1.4vw,13px);overflow:hidden;
+}
+.s1-ver-box{
+  background:var(--win-bg);
+  border:1px solid;border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+  padding:6px 10px;
+  font-family:var(--mono);font-size:clamp(.58rem,.86vw,.72rem);line-height:1.7;
+  color:var(--ink);flex-shrink:0;
+}
+.s1-authors{
+  font-family:var(--mono);font-size:clamp(.58rem,.86vw,.72rem);
+  color:var(--ink);line-height:1.85;flex-shrink:0;
+}
+.s1-ok-row{display:flex;align-items:center;gap:8px;margin-top:auto;flex-shrink:0}
+
+/* ── Z-STACK VISUAL (S5) ──────────────────────────── */
+.z-stack-wrap{position:relative;height:clamp(64px,10.5vh,92px);flex-shrink:0;overflow:visible}
+.z-mini-win{
+  position:absolute;
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light),2px 2px 0 rgba(0,0,0,.22);
+  width:clamp(80px,28%,140px);
+}
+.z-mini-tb{
+  padding:2px 4px;color:#fff;
+  font-family:var(--mono);font-size:.5rem;font-weight:700;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.z-mini-body{
+  background:var(--win-bg);padding:3px 6px;
+  font-family:var(--mono);font-size:.5rem;color:var(--chrome-darker);
+}
+.z-badge{
+  position:absolute;top:-7px;right:-7px;
+  background:var(--tb-from);color:#fff;
+  font-family:var(--mono);font-size:.5rem;font-weight:700;
+  width:14px;height:14px;display:flex;align-items:center;justify-content:center;
+  box-shadow:1px 1px 0 rgba(0,0,0,.3);
+}
+
+/* ── MINESWEEPER GRID (S7) ────────────────────────── */
+.mine-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;flex-shrink:0}
+.mc{
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;
+  font-size:clamp(.5rem,.82vw,.66rem);aspect-ratio:1;min-width:0;
+}
+.mc.r{
+  background:var(--chrome-light);
+  border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+}
+.mc.e{
+  background:var(--chrome-lighter);
+  border-color:var(--chrome-dark) white white var(--chrome-dark);
+  box-shadow:inset 1px 1px 0 var(--chrome-darker);
+}
+.c1{color:#0000cc}.c2{color:#007700}.c3{color:#cc0000}.c4{color:#000088}
+
+/* ── FLOW DIAGRAM (S9) ────────────────────────────── */
+.flow-row{display:flex;align-items:stretch;gap:0;flex-shrink:0}
+.flow-box{
+  flex:1;padding:5px 8px;text-align:center;color:var(--ink);line-height:1.45;
+  background:var(--chrome-lighter);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  font-family:var(--mono);font-size:clamp(.53rem,.82vw,.68rem);
+}
+.flow-box strong{display:block;font-size:clamp(.57rem,.86vw,.72rem);color:var(--tb-from);margin-bottom:2px}
+.flow-arr{flex-shrink:0;display:flex;align-items:center;padding:0 5px;font-family:var(--mono);font-size:.8rem;color:var(--chrome-darker)}
+
+/* ── BOOT TIMELINE + DEP TREE (S10) ──────────────── */
+.tl-wrap{display:flex;align-items:stretch;flex-shrink:0}
+.tl-step{
+  flex:1;padding:5px 8px;line-height:1.4;color:var(--ink);
+  background:var(--chrome-lighter);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  font-family:var(--mono);font-size:clamp(.53rem,.82vw,.68rem);
+}
+.tl-step strong{display:block;color:var(--tb-from);font-size:clamp(.57rem,.86vw,.72rem);margin-bottom:2px}
+.tl-arr{display:flex;align-items:center;padding:0 5px;flex-shrink:0;font-family:var(--mono);font-size:.8rem;color:var(--chrome-darker)}
+.dep-root-row{display:flex;justify-content:center;flex-shrink:0}
+.dep-root-box{
+  background:linear-gradient(90deg,var(--tb-from),var(--tb-to));
+  color:#fff;font-family:var(--mono);font-size:.68rem;font-weight:700;padding:3px 16px;
+}
+.dep-vert{display:flex;justify-content:center;flex-shrink:0;padding:2px 0}
+.dep-vert-line{width:1px;height:10px;background:var(--chrome-darker)}
+.dep-branches{display:flex;gap:5px;justify-content:center;flex-shrink:0}
+.dep-horiz-item{display:flex;flex-direction:column;align-items:center}
+.dep-stem{width:1px;height:8px;background:var(--chrome-darker)}
+.dep-leaf{
+  flex:1;padding:3px 6px;text-align:center;color:var(--ink);line-height:1.4;
+  background:var(--chrome-lighter);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  font-family:var(--mono);font-size:clamp(.52rem,.8vw,.66rem);
+}
+.dep-leaf strong{display:block;color:var(--tb-from)}
+
+/* ── ICON GRID (S8) ──────────────────────────────── */
+.icon-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;padding:5px}
+.icon-cell{
+  background:var(--chrome);
+  border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;
+  box-shadow:inset 1px 1px 0 var(--chrome-light);
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(.8rem,1.5vw,1rem);padding:3px;aspect-ratio:1;
+}
 </style>
 </head>
 <body>
 <div id="bios-boot"><div id="bios-lines"></div></div>
+<div id="s1-bsod" aria-hidden="true">
+  <div class="bsod-stop">*** STOP: 0x0000_WIN95 ***</div>
+  <div class="bsod-dim">A fatal exception has occurred at C:\session\startup.exe</div>
+  <div style="margin-top:1.4em">WIN95_DESKTOP_SIMULATION</div>
+  <div class="bsod-dim">Beginning presentation&hellip;</div>
+</div>
 <div id="deck">
 
 <!-- ══ S1 · TITLE ══════════════════════════════════ -->
 <section class="slide" id="s1">
-  <div class="win bv-out win-shad">
+  <div class="win bv-out win-shad" style="max-width:720px">
     <div class="win-title">
-      <span>&#128190;&nbsp;win95-demo — Desktop Simulation</span>
+      <span>&#9432;&nbsp;About — win95 Desktop Simulation</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
-      <div class="win-inner title-inner" style="gap:12px;padding:clamp(16px,3vw,36px)">
-        <div style="font-family:var(--mono);font-size:clamp(2.8rem,8.5vw,6.5rem);font-weight:700;letter-spacing:-0.02em;line-height:0.88;color:var(--ink)">win95<br>Desktop<br>Simulation</div>
-        <div class="hr" style="width:100%"></div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center">
-          <span class="chip">React 19</span>
-          <span class="chip">Vite 5</span>
-          <span class="chip">HashRouter</span>
-          <span class="chip">Vitest 3</span>
-          <span class="chip">Vercel</span>
+      <div class="win-inner s1-about" style="padding:0">
+        <div class="s1-banner">
+          <div class="s1-banner-title">win95<br>Desktop<br>Simulation</div>
+          <div class="s1-banner-sub">Architecture Deep Dive</div>
         </div>
-        <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center">
-          <span class="chip">172 tests</span>
-          <span class="chip">9 windows</span>
-          <span class="chip">5 authors</span>
-          <span class="chip">1 machine</span>
-        </div>
-        <div class="hl" style="text-align:left;max-width:480px">
-          ↓ navigate with ← → arrow keys, Space, or the taskbar below
-        </div>
-        <div class="uni-row" style="max-width:480px;width:100%">
-          <img class="polis-logo" width="34" height="43" src="data:image/png;base64,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" alt="Polis University">
-          <div>
-            <div class="uni-name">Polis University</div>
-            <div class="uni-prof">Supervised by: Hekuran Islamaj &amp; Melisa Tufa</div>
+        <div class="s1-right">
+          <div class="s1-ver-box">
+            <strong>win95-demo</strong> — Desktop Simulation v1.0<br>
+            React 19 &nbsp;·&nbsp; Vite 5 &nbsp;·&nbsp; Vitest 3 &nbsp;·&nbsp; Vercel<br>
+            172 tests &nbsp;·&nbsp; 9 windows &nbsp;·&nbsp; 5 authors &nbsp;·&nbsp; 0 UI libraries
+          </div>
+          <div class="s1-authors">
+            Isli Basha &nbsp;&nbsp;&nbsp;Sidrit Halili &nbsp;&nbsp;&nbsp;Serxhio Lekgegaj<br>
+            Helena Petro &nbsp;&nbsp;&nbsp;Aksel Mana
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:4px;flex-shrink:0">
+            <span class="chip">React 19</span><span class="chip">Vite 5</span><span class="chip">HashRouter</span><span class="chip">Vitest 3</span><span class="chip">Vercel</span>
+          </div>
+          <div class="uni-row">
+            <img class="polis-logo" width="34" height="43" src="data:image/png;base64,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" alt="Polis University">
+            <div>
+              <div class="uni-name">Polis University</div>
+              <div class="uni-prof">Supervised by: Hekuran Islamaj &amp; Melisa Tufa</div>
+            </div>
+          </div>
+          <div class="s1-ok-row">
+            <button onclick="void 0" style="font-family:var(--mono);font-size:.75rem;font-weight:700;padding:3px 20px;background:var(--chrome);border:1px solid;border-color:white var(--chrome-darker) var(--chrome-darker) white;box-shadow:inset 1px 1px 0 var(--chrome-light),inset -1px -1px 0 var(--chrome-dark);cursor:default">OK</button>
+            <span style="font-family:var(--mono);font-size:.58rem;color:var(--chrome-darker)">← → to navigate &nbsp;·&nbsp; Space to advance</span>
           </div>
         </div>
       </div>
@@ -557,48 +716,60 @@ body::before{
 <!-- ══ S5 · WINDOW ENGINE — ISLI ═══════════════════ -->
 <section class="slide s-author" id="s5">
   <div class="author-crown">Isli Basha</div>
-  <div class="author-sub">Project Lead · Core Architecture · Window Engine</div>
+  <div class="author-sub">Project Lead · Window Engine · Core Architecture</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#9881;&nbsp;Window.jsx — Drag · Z-Index · HashRouter</span>
+      <span>&#9881;&nbsp;Window.jsx — Z-Index · Drag · HashRouter</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
           <div class="col">
-            <div class="h2" style="padding:2px 0">Drag · Pointer Events API</div>
-            <div class="code">
-<span class="cm">// mouse events break when cursor exits element at speed</span><br>
-<span class="cm">// Pointer Events route ALL events to capturing element</span><br><br>
-<span class="var">el</span>.<span class="fn">setPointerCapture</span>(<span class="var">e</span>.<span class="var">pointerId</span>)<br><br>
-<span class="cm">// store in ref — NOT state — avoids 60 re-renders/sec</span><br>
-<span class="kw">const</span> <span class="var">dragState</span> = <span class="fn">useRef</span>({ <span class="var">startX</span>, <span class="var">startY</span>, <span class="var">ox</span>, <span class="var">oy</span> })<br>
-<span class="cm">// only call setOffset() when DOM actually needs to move</span>
+            <div class="z-stack-wrap">
+              <div class="z-mini-win" style="top:0;left:0;z-index:1;opacity:.5">
+                <div class="z-mini-tb" style="background:var(--chrome-dark)">&#128193; Projects.exe</div>
+                <div class="z-mini-body">z-index: 1</div>
+              </div>
+              <div class="z-mini-win" style="top:clamp(10px,1.8vh,18px);left:clamp(14px,3vw,26px);z-index:2;opacity:.75">
+                <div class="z-mini-tb" style="background:var(--tb-from)">&#128196; readme.txt</div>
+                <div class="z-mini-body">z-index: 2</div>
+                <div class="z-badge">2</div>
+              </div>
+              <div class="z-mini-win" style="top:clamp(20px,3.5vh,34px);left:clamp(28px,6vw,52px);z-index:3">
+                <div class="z-mini-tb" style="background:linear-gradient(90deg,var(--tb-from),var(--tb-to))">&#9881; Window.jsx</div>
+                <div class="z-mini-body">z-index: 3 ← active</div>
+                <div class="z-badge">3</div>
+              </div>
             </div>
-            <div class="h2" style="padding:2px 0">Z-Index · Array as implicit ordering</div>
             <div class="code">
-<span class="cm">// order[] = array of window IDs</span><br>
-<span class="cm">// a window's z-index = its index in the array</span><br><br>
+<span class="cm">// z-index = position in the order[] array</span><br>
 <span class="kw">function</span> <span class="fn">bringToFront</span>(<span class="var">id</span>) {<br>
 &nbsp;&nbsp;<span class="kw">return</span> [...<span class="var">order</span>.<span class="fn">filter</span>(<span class="var">x</span> => <span class="var">x</span> !== <span class="var">id</span>), <span class="var">id</span>]<br>
-}<span class="cm"> // last element on top. always 0..n, no overflow</span>
+}<span class="cm"> // last item = on top. never overflows</span>
+            </div>
+            <div class="col" style="gap:3px;margin-top:2px">
+              <div class="body">→ Click any window and it pops to the front — no CSS z-index conflicts ever</div>
+              <div class="body">→ <strong>minimize</strong>: display:none, stays in DOM, taskbar shows it. <strong>close</strong>: removed entirely, reopening gives a fresh slate</div>
             </div>
           </div>
           <div class="col">
-            <div class="h2" style="padding:2px 0">HashRouter · Why not BrowserRouter</div>
+            <div class="h2" style="padding:2px 0">Drag — Why Pointer Events?</div>
             <div class="code">
-<span class="cm">// BrowserRouter: /projects → server must serve index.html</span><br>
+<span class="cm">// mouse events stop if cursor leaves the element fast</span><br>
+<span class="cm">// Pointer Events lock ALL events to the dragging element</span><br><br>
+<span class="var">el</span>.<span class="fn">setPointerCapture</span>(<span class="var">e</span>.<span class="var">pointerId</span>)<br><br>
+<span class="cm">// position stored in ref, not state</span><br>
+<span class="cm">// → no React re-render on every pixel moved</span>
+            </div>
+            <div class="h2" style="padding:2px 0">HashRouter — Why not BrowserRouter?</div>
+            <div class="code">
+<span class="cm">// BrowserRouter: /projects → server must rewrite to index.html</span><br>
 <span class="cm">// GitHub Pages has no rewrite rules → 404 on refresh</span><br><br>
 <span class="cm">// HashRouter: /#/projects → server only ever sees /</span><br>
-<span class="cm">// always serves index.html, browser handles fragment</span><br><br>
-<span class="cm">// RouterSync (renderless): reads hash on mount → open window</span><br>
-<span class="cm">// writes hash when window opens → every URL is deep-linkable</span>
+<span class="cm">// always works, zero server config needed</span>
             </div>
-            <div class="hl">
-              <strong>minimize vs close</strong><br>
-              'hidden' Map: window stays in DOM, display:none — taskbar button persists. 'closed' Set: removed from render tree entirely. Reopening gives a clean slate — authentic Win95 feel.
-            </div>
+            <div class="hl">RouterSync: opens the right window on load, updates the URL when any window opens. Every state is a shareable link.</div>
           </div>
         </div>
       </div>
@@ -617,14 +788,13 @@ body::before{
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
           <div class="col">
-            <div class="h2" style="padding:2px 0">The rule: logic without DOM lives in lib/</div>
-            <div class="code">
-<span class="cm">// lib/resizeWindow.js — pure, testable, zero React</span><br>
-<span class="kw">export function</span> <span class="fn">computeResize</span>(<span class="var">edge</span>, <span class="var">start</span>, <span class="var">delta</span>) {<br>
-&nbsp;&nbsp;<span class="kw">const</span> <span class="var">w</span> = <span class="fn">Math.max</span>(<span class="num">MIN_W</span>, <span class="var">start</span>.<span class="var">w</span> + <span class="var">delta</span>.<span class="var">x</span>)<br>
-&nbsp;&nbsp;<span class="kw">const</span> <span class="var">h</span> = <span class="fn">Math.max</span>(<span class="num">MIN_H</span>, <span class="var">start</span>.<span class="var">h</span> + <span class="var">delta</span>.<span class="var">y</span>)<br>
-&nbsp;&nbsp;<span class="kw">return</span> { <span class="var">width</span>: <span class="var">w</span>, <span class="var">height</span>: <span class="var">h</span> }<br>
-}<span class="cm"> // unit-tested without mounting any component</span>
+            <div class="h2" style="padding:2px 0">The rule: if it doesn't touch the DOM, it lives in lib/</div>
+            <div class="flow-row" style="flex-shrink:0">
+              <div class="flow-box"><strong>Input</strong>board, row, col<br><span style="opacity:.7">(plain objects)</span></div>
+              <div class="flow-arr">&#8594;</div>
+              <div class="flow-box" style="background:var(--term);color:var(--phosphor);border-color:var(--chrome-darker)"><strong style="color:#fff">lib/ function</strong>pure JS<br><span style="opacity:.7">no DOM · no React</span></div>
+              <div class="flow-arr">&#8594;</div>
+              <div class="flow-box"><strong>Output</strong>new Board<br><span style="opacity:.7">(never mutated)</span></div>
             </div>
             <div class="code">
 <span class="cm">// lib/minesweeper.js — board = 2D array of plain objects</span><br>
@@ -632,15 +802,22 @@ body::before{
 <span class="fn">revealCell</span>(<span class="var">b</span>,<span class="var">r</span>,<span class="var">c</span>) → <span class="ty">Board</span>&nbsp;<span class="cm">// plants mines on first call</span><br>
 <span class="fn">flagCell</span>(<span class="var">b</span>,<span class="var">r</span>,<span class="var">c</span>) → <span class="ty">Board</span>&nbsp;&nbsp;<span class="cm">// returns new state, no mutation</span>
             </div>
+            <div class="code">
+<span class="cm">// lib/resizeWindow.js — pure, testable, zero React</span><br>
+<span class="kw">export function</span> <span class="fn">computeResize</span>(<span class="var">edge</span>, <span class="var">start</span>, <span class="var">delta</span>) {<br>
+&nbsp;&nbsp;<span class="kw">const</span> <span class="var">w</span> = <span class="fn">Math.max</span>(<span class="num">MIN_W</span>, <span class="var">start</span>.<span class="var">w</span> + <span class="var">delta</span>.<span class="var">x</span>)<br>
+&nbsp;&nbsp;<span class="kw">return</span> { <span class="var">width</span>: <span class="var">w</span>, <span class="var">height</span>: <span class="var">h</span> }<br>
+}<span class="cm"> // tested without mounting any React component</span>
+            </div>
           </div>
           <div class="col">
-            <div class="h2" style="padding:2px 0">Why this matters</div>
-            <div class="hl" style="margin-bottom:2px">"Keep logic that doesn't need the DOM out of components and into lib/" — Isli Basha</div>
-            <div class="col" style="gap:4px">
-              <div class="body">→ <strong>Faster tests</strong> — no component mount, no jsdom overhead, just data in → data out</div>
-              <div class="body">→ <strong>Parallel development</strong> — Isli built the window shell while Sidrit wrote game logic independently, zero coupling</div>
-              <div class="body">→ <strong>Easier to reason about</strong> — pure function: same input always gives same output, no hidden state</div>
-              <div class="body">→ <strong>Portable</strong> — game logic usable outside React without changes</div>
+            <div class="h2" style="padding:2px 0">Why does this matter?</div>
+            <div class="hl" style="margin-bottom:4px">"Keep logic that doesn't need the DOM out of components and into lib/" — Isli Basha</div>
+            <div class="col" style="gap:5px">
+              <div class="body">→ <strong>Anyone can test it</strong> — no browser needed. Just data in, data out. Like a math function.</div>
+              <div class="body">→ <strong>Team worked in parallel</strong> — Isli built the window shell while Sidrit wrote game logic. Neither blocked the other.</div>
+              <div class="body">→ <strong>Same input = same output, always</strong> — no hidden state, no surprise bugs that only appear when you click in a certain order</div>
+              <div class="body">→ <strong>Portable</strong> — the game logic works outside React without any changes</div>
             </div>
             <div class="stat" style="margin-top:auto">
               <div class="stat-n">lib/</div>
@@ -666,37 +843,40 @@ body::before{
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
           <div class="col">
-            <div class="h2" style="padding:2px 0">Minesweeper · Safe First Click</div>
+            <div class="h2" style="padding:2px 0">Minesweeper · Your first click is always safe</div>
+            <div class="mine-grid">
+              <div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc"></div><div class="mc e"></div><div class="mc e"></div><div class="mc e"></div><div class="mc"></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc r"><span class="c1">1</span></div><div class="mc e"></div><div class="mc e"></div><div class="mc e"></div><div class="mc r"><span class="c1">1</span></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc r"><span class="c2">2</span></div><div class="mc r"><span class="c1">1</span></div><div class="mc e"></div><div class="mc r"><span class="c1">1</span></div><div class="mc r"><span class="c2">2</span></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div>
+              <div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div><div class="mc"></div>
+            </div>
             <div class="code">
-<span class="cm">// createBoard() — empty grid, no mines placed yet</span><br>
 <span class="kw">function</span> <span class="fn">revealCell</span>(<span class="var">board</span>, <span class="var">r</span>, <span class="var">c</span>) {<br>
-&nbsp;&nbsp;<span class="kw">if</span> (!<span class="var">board</span>.<span class="var">minesPlanted</span>) {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// first click: plant mines, skip [r,c] + neighbors</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">board</span> = <span class="fn">plantMines</span>(<span class="var">board</span>, <span class="var">r</span>, <span class="var">c</span>)<br>
-&nbsp;&nbsp;}<br>
-&nbsp;&nbsp;<span class="cm">// flood-fill with iterative stack — not recursion</span><br>
-&nbsp;&nbsp;<span class="cm">// avoids RangeError on large open fields</span><br>
-&nbsp;&nbsp;<span class="kw">const</span> <span class="var">stack</span> = [[<span class="var">r</span>, <span class="var">c</span>]]<span class="cm"> // heap, no call-stack limit</span><br>
-&nbsp;&nbsp;<span class="kw">while</span> (<span class="var">stack</span>.<span class="var">length</span>) { <span class="cm">/* pop → check → push neighbors */</span> }<br>
+&nbsp;&nbsp;<span class="kw">if</span> (!<span class="var">board</span>.<span class="var">minesPlanted</span>)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">board</span> = <span class="fn">plantMines</span>(<span class="var">board</span>, <span class="var">r</span>, <span class="var">c</span>) <span class="cm">// safe zone guaranteed</span><br>
+&nbsp;&nbsp;<span class="cm">// iterative stack, not recursion → no RangeError on big fields</span><br>
+&nbsp;&nbsp;<span class="kw">const</span> <span class="var">stack</span> = [[<span class="var">r</span>, <span class="var">c</span>]]<br>
+&nbsp;&nbsp;<span class="kw">while</span> (<span class="var">stack</span>.<span class="var">length</span>) { <span class="cm">/* pop → reveal → push empty neighbors */</span> }<br>
 }
             </div>
-            <div class="hl">The safe-start guarantee is entirely internal to lib/. The caller never has to think about it.</div>
           </div>
           <div class="col">
-            <div class="h2" style="padding:2px 0">Snake · Stale Closure &amp; Direction</div>
+            <div class="h2" style="padding:2px 0">Snake · The stale closure trap</div>
             <div class="code">
-<span class="cm">// turn() rejects if new dir is opposite of current</span><br>
-<span class="cm">// prevents instant self-reversal death (feels unfair)</span><br><br>
-<span class="cm">// Stale closure problem:</span><br>
-<span class="cm">// setGame(tick(game)) — 'game' is always initial value</span><br>
-<span class="cm">// because setInterval closes over it at creation time</span><br><br>
-<span class="cm">// Fix: functional updater — React gives latest state</span><br>
-<span class="fn">setGame</span>(<span class="var">g</span> => <span class="fn">tick</span>(<span class="var">g</span>))
+<span class="cm">// setInterval closes over 'game' at creation time</span><br>
+<span class="cm">// 'game' is always the initial value — the snake never moves</span><br><br>
+<span class="cm">// WRONG:</span><br>
+<span class="fn">setGame</span>(<span class="fn">tick</span>(<span class="var">game</span>)) <span class="cm">// stale — uses first 'game' forever</span><br><br>
+<span class="cm">// RIGHT: functional updater — React gives you latest state</span><br>
+<span class="fn">setGame</span>(<span class="var">g</span> => <span class="fn">tick</span>(<span class="var">g</span>)) <span class="cm">// always fresh</span>
             </div>
             <div class="col" style="gap:4px;margin-top:4px">
-              <div class="body">→ Logic written and unit-tested <em>before</em> any JSX was opened</div>
-              <div class="body">→ Components are thin wrappers: mount → tick interval → keydown → render projection of lib state</div>
-              <div class="body">→ His lib files account for most of the 172 tests in the suite</div>
+              <div class="body">→ <strong>All logic tested before any JSX</strong> — minesweeper, snake, and direction rules were done and green before the first component was opened</div>
+              <div class="body">→ Components are thin wrappers: read lib state, render grid, handle keypress</div>
+              <div class="body">→ His lib files drive most of the 172 tests in the suite</div>
             </div>
           </div>
         </div>
@@ -711,47 +891,59 @@ body::before{
   <div class="author-sub">Canvas · Visual Effects · Easter Eggs · SVG System</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#127912;&nbsp;canvas — BFS Paint · 3D Starfield · BSOD</span>
+      <span>&#127912;&nbsp;canvas — BFS Paint · 3D Starfield · 15 SVG Icons</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
       <div class="win-inner" style="padding:4px">
-        <div class="g2" style="height:100%;gap:6px">
+        <div class="g3" style="height:100%;gap:6px">
           <div class="col">
-            <div class="h2" style="padding:2px 0">Paint · BFS Flood Fill + Snapshot Preview</div>
+            <div class="h2" style="padding:2px 0">Paint · BFS Flood Fill</div>
+            <svg viewBox="0 0 100 66" style="border:1px solid var(--chrome-dark);background:#fff;flex-shrink:0;height:clamp(48px,8vh,68px);width:100%" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="4" width="34" height="22" fill="#0000aa"/>
+              <ellipse cx="68" cy="18" rx="22" ry="13" fill="#cc0000"/>
+              <line x1="4" y1="38" x2="96" y2="38" stroke="#007700" stroke-width="2.5"/>
+              <path d="M4 54 Q28 44 52 54 Q76 64 96 54" stroke="#cc8800" stroke-width="1.5" fill="none"/>
+            </svg>
             <div class="code">
-<span class="cm">// BFS on the raw pixel buffer (Uint8ClampedArray)</span><br>
-<span class="cm">// getImageData → read target RGBA → push coord → loop</span><br>
-<span class="cm">// overwrite matching pixels, push 4 neighbors, putImageData</span><br>
-<span class="cm">// guard: clicked pixel = fill color → return immediately</span><br><br>
-<span class="cm">// Live preview for line / rect / ellipse:</span><br>
-<span class="var">ctx</span>.<span class="fn">getImageData</span>()&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// save snapshot on mousedown</span><br>
-<span class="var">ctx</span>.<span class="fn">putImageData</span>(<span class="var">snap</span>)&nbsp;<span class="cm">// restore on every mousemove</span><br>
-<span class="cm">// simpler than a second overlay canvas</span>
+<span class="cm">// BFS on raw pixel buffer (Uint8ClampedArray)</span><br>
+<span class="var">ctx</span>.<span class="fn">getImageData</span>() <span class="cm">// read target color</span><br>
+<span class="cm">// push neighbors that match, overwrite each</span><br>
+<span class="var">ctx</span>.<span class="fn">putImageData</span>(<span class="var">snap</span>) <span class="cm">// restore on mousemove</span>
             </div>
-            <div class="h2" style="padding:2px 0">BSOD · useEffect timing</div>
-            <div class="code">
-<span class="cm">// Trigger + dismiss in SEPARATE useEffect calls</span><br>
-<span class="cm">// dismiss listener added only when visible becomes true</span><br>
-<span class="cm">// → triggering keydown has already propagated by then</span><br>
-<span class="cm">// modifier keys (Ctrl/Shift/Alt/Meta) filtered via Set</span>
-            </div>
+            <div class="body" style="margin-top:3px">→ Snapshot-restore for live preview — no second overlay canvas needed</div>
           </div>
           <div class="col">
             <div class="h2" style="padding:2px 0">Screensaver · 3D Starfield</div>
+            <svg viewBox="0 0 100 66" style="background:#0c0c0c;border:1px solid var(--chrome-darker);flex-shrink:0;height:clamp(48px,8vh,68px);width:100%" xmlns="http://www.w3.org/2000/svg">
+              <line x1="50" y1="33" x2="4" y2="4" stroke="white" stroke-width="0.4" opacity="0.3"/>
+              <line x1="50" y1="33" x2="96" y2="8" stroke="white" stroke-width="0.4" opacity="0.3"/>
+              <line x1="50" y1="33" x2="6" y2="62" stroke="white" stroke-width="0.4" opacity="0.3"/>
+              <line x1="50" y1="33" x2="94" y2="60" stroke="white" stroke-width="0.4" opacity="0.3"/>
+              <circle cx="6" cy="5" r="1.8" fill="white"/><circle cx="94" cy="9" r="1.6" fill="white"/>
+              <circle cx="7" cy="61" r="2" fill="white"/><circle cx="93" cy="59" r="1.7" fill="white"/>
+              <circle cx="22" cy="16" r="1" fill="white"/><circle cx="78" cy="14" r="0.9" fill="white"/>
+              <circle cx="28" cy="52" r="1.1" fill="white"/><circle cx="74" cy="54" r="1" fill="white"/>
+              <circle cx="38" cy="26" r="0.5" fill="white" opacity="0.6"/><circle cx="62" cy="42" r="0.5" fill="white" opacity="0.6"/>
+              <circle cx="44" cy="38" r="0.4" fill="white" opacity="0.5"/>
+            </svg>
             <div class="code">
-<span class="cm">// Each star: (x, y, z). z decreases each frame.</span><br><br>
-<span class="cm">// Perspective projection:</span><br>
-<span class="var">sx</span> = <span class="var">cx</span> + (<span class="var">x</span> * <span class="num">FOCAL</span>) / <span class="var">z</span>&nbsp;&nbsp;<span class="cm">// screen x</span><br>
-<span class="var">sy</span> = <span class="var">cy</span> + (<span class="var">y</span> * <span class="num">FOCAL</span>) / <span class="var">z</span>&nbsp;&nbsp;<span class="cm">// screen y</span><br>
-<span class="cm">// as z → 0, star rushes toward viewer</span><br>
-<span class="cm">// store prev z (pz): draw line prev→current = streak</span><br>
-<span class="cm">// cancelAnimationFrame on cleanup — no memory leaks</span>
+<span class="cm">// each star: x, y, z (depth)</span><br>
+<span class="cm">// z decreases each frame → star moves outward</span><br>
+sx = cx + (x * FOCAL) / z <span class="cm">// screen x</span><br>
+<span class="cm">// prev→current z = motion streak</span>
             </div>
-            <div class="hl" style="margin-top:4px">
-              <strong>SVG icons:</strong> all 15 glyphs in one AppGlyph component switching on a 'kind' prop. shapeRendering="crispEdges" for pixel-faithful 18×18 icons. One file — the entire icon vocabulary in one scroll.
+            <div class="body" style="margin-top:3px">→ Every animation checks <code>prefers-reduced-motion</code> — respects accessibility settings</div>
+          </div>
+          <div class="col">
+            <div class="h2" style="padding:2px 0">SVG Icons · 15 Glyphs</div>
+            <div class="icon-grid">
+              <div class="icon-cell">&#128193;</div><div class="icon-cell">&#128196;</div><div class="icon-cell">&#9993;</div><div class="icon-cell">&#9000;</div><div class="icon-cell">&#128163;</div>
+              <div class="icon-cell">&#128013;</div><div class="icon-cell">&#127912;</div><div class="icon-cell">&#127760;</div><div class="icon-cell">&#128221;</div><div class="icon-cell">&#128190;</div>
+              <div class="icon-cell">&#9881;</div><div class="icon-cell">&#9875;</div><div class="icon-cell">&#128101;</div><div class="icon-cell">&#9203;</div><div class="icon-cell">&#9989;</div>
             </div>
-            <div class="body" style="margin-top:4px">→ Every animation respects <code>prefers-reduced-motion</code> — added proactively across Paint, Screensaver, and BootSequence</div>
+            <div class="body" style="margin-top:3px">→ One AppGlyph component, switches on a 'kind' prop. <code>shapeRendering="crispEdges"</code> for pixel-faithful 18×18 icons</div>
+            <div class="hl" style="margin-top:4px;font-size:.62rem"><strong>Easter egg:</strong> Ctrl+B anywhere triggers the BSOD. Press any key to dismiss.</div>
           </div>
         </div>
       </div>
@@ -762,51 +954,51 @@ body::before{
 <!-- ══ S9 · DATA LAYER — HELENA ════════════════════ -->
 <section class="slide s-author" id="s9">
   <div class="author-crown">Helena Petro</div>
-  <div class="author-sub">Data Layer · CRUD Apps · Forms &amp; API</div>
+  <div class="author-sub">Data Layer · Notes CRUD · Forms &amp; API</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#128190;&nbsp;data — Notes · API · LocalStorage</span>
+      <span>&#128190;&nbsp;data — Notes · LocalStorage · Vercel Functions</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
           <div class="col">
-            <div class="h2" style="padding:2px 0">Notes · Auto-save CRUD</div>
-            <div class="code">
-<span class="cm">// All state at component level — no context needed</span><br>
-<span class="cm">// Notes are local; no other component cares about them</span><br><br>
-<span class="cm">// Single useEffect handles all persistence:</span><br>
-<span class="fn">useEffect</span>(() => { <span class="fn">saveNotes</span>(<span class="var">notes</span>) }, [<span class="var">notes</span>])<br>
-<span class="cm">// fires after every render → auto-save on each keystroke</span><br><br>
-<span class="cm">// Note shape:</span><br>
-<span class="cm">// { id: crypto.randomUUID(), title, body, updatedAt }</span><br>
-<span class="cm">// sorted by updatedAt — most recently edited at top</span>
+            <div class="h2" style="padding:2px 0">Notes · How auto-save works</div>
+            <div class="flow-row" style="flex-shrink:0">
+              <div class="flow-box"><strong>User types</strong>title or body</div>
+              <div class="flow-arr">&#8594;</div>
+              <div class="flow-box" style="background:var(--term);color:var(--phosphor);border-color:var(--chrome-darker)"><strong style="color:#fff">useEffect</strong>saveNotes(notes)</div>
+              <div class="flow-arr">&#8594;</div>
+              <div class="flow-box"><strong>localStorage</strong>'win95-notes'</div>
             </div>
-            <div class="h2" style="padding:2px 0">Namespaced LocalStorage convention</div>
+            <div class="code">
+<span class="cm">// one effect handles all persistence — fires on every render</span><br>
+<span class="fn">useEffect</span>(() => { <span class="fn">saveNotes</span>(<span class="var">notes</span>) }, [<span class="var">notes</span>])<br><br>
+<span class="cm">// note shape: { id: crypto.randomUUID(), title, body, updatedAt }</span><br>
+<span class="cm">// sorted by updatedAt — most recently edited appears first</span>
+            </div>
             <div class="code">
 <span class="str">'win95-notes'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// Notes array</span><br>
 <span class="str">'win95:positions:v1'</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// window positions</span><br>
 <span class="str">'win95:icon-positions:v1'</span>&nbsp;&nbsp;<span class="cm">// icon positions</span><br>
-<span class="cm">// versioned keys prevent silent schema collisions</span>
+<span class="cm">// versioned keys prevent silent schema collisions on reload</span>
             </div>
           </div>
           <div class="col">
-            <div class="h2" style="padding:2px 0">API · Vercel Serverless Functions</div>
+            <div class="h2" style="padding:2px 0">API · Two Vercel Serverless Functions</div>
             <div class="code">
-<span class="cm">// api/contact.js — POST handler</span><br>
-<span class="cm">// validate body client-side AND server-side</span><br>
-<span class="cm">// client validation can be bypassed — server must validate too</span><br>
-<span class="cm">// demo branch: stubbed to {ok:true}, real flow in place</span><br><br>
+<span class="cm">// api/contact.js — validates on server AND client</span><br>
+<span class="cm">// client validation can be bypassed — server must also check</span><br><br>
 <span class="cm">// api/visit.js — visitor counter</span><br>
-<span class="cm">// real: Upstash Redis REST API</span><br>
-<span class="cm">// demo: hook returns 1995 (Easter egg)</span><br>
-<span class="cm">// component never changed — hook hides the detail</span>
+<span class="cm">// real branch: Upstash Redis REST API</span><br>
+<span class="cm">// demo branch: hook returns 1995 (Easter egg)</span><br>
+<span class="cm">// component never changed — the hook hides the detail</span>
             </div>
             <div class="col" style="gap:4px;margin-top:4px">
-              <div class="body">→ <strong>ContactExe</strong>: inbox is hardcoded mock (Bill Gates, Tech Support) but outgoing form hits the real API — deliberate design choice</div>
-              <div class="body">→ <strong>Data files tested</strong>: projects.test.js asserts every entry has title, description, url — catches malformed entries at CI time, not in a live demo</div>
-              <div class="body">→ <strong>Data-first</strong>: agree shape → write test → fill data</div>
+              <div class="body">→ <strong>ContactExe inbox</strong> is a hardcoded mock (Bill Gates, Tech Support) — but the outgoing form hits the real API. Deliberate: demo data, real delivery.</div>
+              <div class="body">→ <strong>projects.test.js</strong> asserts every entry has title, description, url. Catches malformed data at CI time, not during a live presentation.</div>
+              <div class="body">→ <strong>Data-first workflow:</strong> agree on the shape → write the test → fill in the real data</div>
             </div>
           </div>
         </div>
@@ -821,48 +1013,59 @@ body::before{
   <div class="author-sub">Hooks · Boot Experience · Test Infrastructure</div>
   <div class="win bv-out win-shad">
     <div class="win-title">
-      <span>&#9203;&nbsp;system — useClock · useInactivity · BootSequence</span>
+      <span>&#9203;&nbsp;system — useClock · BootSequence · Vitest Setup</span>
       <div class="win-btns"><span class="win-btn">_</span><span class="win-btn">□</span><span class="win-btn">✕</span></div>
     </div>
     <div class="win-body">
       <div class="win-inner" style="padding:4px">
         <div class="g2" style="height:100%;gap:6px">
           <div class="col">
+            <div class="h2" style="padding:2px 0">Boot · Three phases, one tab</div>
+            <div class="tl-wrap">
+              <div class="tl-step"><strong>&#9312; BIOS Text</strong>Award header + team list prints line by line</div>
+              <div class="tl-arr">&#8594;</div>
+              <div class="tl-step"><strong>&#9313; Memory Check</strong>CPU / RAM / HDD counters animate</div>
+              <div class="tl-arr">&#8594;</div>
+              <div class="tl-step"><strong>&#9314; Win95 Splash</strong>Logo + progress bar, then desktop appears</div>
+            </div>
+            <div class="code">
+<span class="cm">// sessionStorage (not localStorage) → new tab = new boot</span><br>
+<span class="cm">// bootChime: Web Audio oscillator + gain envelope</span><br>
+<span class="cm">// synthesized instantly — no network fetch, no binary asset</span><br>
+<span class="cm">// skips entirely on prefers-reduced-motion</span>
+            </div>
             <div class="h2" style="padding:2px 0">useClock · Minute-aligned, no drift</div>
             <div class="code">
-<span class="cm">// setInterval(tick, 60000) at 14:23:47</span><br>
-<span class="cm">// → next fire: 14:24:47 (47 seconds past the minute — wrong)</span><br><br>
-<span class="cm">// Fix: align to next minute boundary with a one-shot timeout</span><br>
+<span class="cm">// setInterval at 14:23:47 → fires at 14:24:47 (wrong)</span><br>
 <span class="kw">const</span> <span class="var">msUntil</span> = (<span class="num">60</span> - <span class="var">sec</span>) * <span class="num">1000</span> - <span class="var">ms</span><br>
-<span class="fn">setTimeout</span>(() => {<br>
-&nbsp;&nbsp;<span class="fn">tick</span>()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">// immediate update</span><br>
-&nbsp;&nbsp;<span class="fn">setInterval</span>(<span class="var">tick</span>, <span class="num">60_000</span>)&nbsp;&nbsp;&nbsp;<span class="cm">// fires exactly at :00</span><br>
-}, <span class="var">msUntil</span>)
-            </div>
-            <div class="h2" style="padding:2px 0">useInactivity · Passive listeners</div>
-            <div class="code">
-<span class="cm">// 5 events: mousemove keydown pointerdown scroll touchstart</span><br>
-<span class="cm">// all registered {passive:true} — browser can scroll freely</span><br>
-<span class="cm">// on each event: clearTimeout + restart 45s timer</span><br>
-<span class="cm">// on timeout: screensaver activates</span>
+<span class="fn">setTimeout</span>(() => { <span class="fn">tick</span>(); <span class="fn">setInterval</span>(<span class="var">tick</span>, <span class="num">60_000</span>) }, <span class="var">msUntil</span>)<br>
+<span class="cm">// one-shot aligns to next :00, then interval fires on time</span>
             </div>
           </div>
           <div class="col">
-            <div class="h2" style="padding:2px 0">BootSequence · Three phases</div>
-            <div class="col" style="gap:4px">
-              <div class="body">→ BIOS text output → memory check animation → Windows 95 splash</div>
-              <div class="body">→ Plays once per tab via <strong>sessionStorage</strong> — not localStorage (new tab = new boot)</div>
-              <div class="body">→ Skips entirely on prefers-reduced-motion — added proactively</div>
+            <div class="h2" style="padding:2px 0">Aksel's first commit unblocked everyone</div>
+            <div class="dep-root-row">
+              <div class="dep-root-box">setup.js — Vitest + jsdom + localStorage mocks</div>
             </div>
-            <div class="h2" style="padding:4px 0 2px">bootChime · Web Audio API</div>
-            <div class="code">
-<span class="cm">// Audio file = network fetch, can arrive late, timing broken</span><br>
-<span class="cm">// Web Audio: oscillator + gain envelope, synthesized instantly</span><br>
-<span class="cm">// zero network dependency, zero latency, no binary assets</span><br>
-<span class="cm">// synthetic sound fits the 8-bit aesthetic anyway</span>
+            <div class="dep-vert"><div class="dep-vert-line"></div></div>
+            <div class="dep-branches">
+              <div class="dep-horiz-item">
+                <div class="dep-stem"></div>
+                <div class="dep-leaf"><strong>Sidrit</strong>game tests</div>
+              </div>
+              <div class="dep-horiz-item">
+                <div class="dep-stem"></div>
+                <div class="dep-leaf"><strong>Helena</strong>data tests</div>
+              </div>
+              <div class="dep-horiz-item">
+                <div class="dep-stem"></div>
+                <div class="dep-leaf"><strong>Isli</strong>window tests</div>
+              </div>
             </div>
-            <div class="hl" style="margin-top:4px">
-              Aksel's first task: configure Vitest + jsdom + localStorage mocks. This unblocked Sidrit, Helena, and Isli in parallel before a single component existed.
+            <div class="col" style="gap:4px;margin-top:6px">
+              <div class="body">→ His setup.js was the first file committed. Without it, no one else could write tests.</div>
+              <div class="body">→ <strong>useInactivity</strong>: 5 events registered as <code>passive:true</code> — browser scrolls freely. 45s idle → screensaver activates.</div>
+              <div class="body">→ Every hook is independently testable — no components needed in the test file</div>
             </div>
           </div>
         </div>
@@ -1147,6 +1350,20 @@ body::before{
     lastWheel = now;
     if (e.deltaY > 0) next(); else prev();
   }, { passive: true });
+
+  // ── s1 bsod flash ─────────────────────────────────
+  window.runS1Bsod = function () {
+    var el = document.getElementById('s1-bsod');
+    if (!el) return;
+    el.style.display = 'flex';
+    setTimeout(function () {
+      el.classList.add('bsod-out');
+      setTimeout(function () {
+        el.style.display = 'none';
+        el.classList.remove('bsod-out');
+      }, 400);
+    }, 1800);
+  };
 })();
 </script>
 
@@ -1163,7 +1380,10 @@ body::before{
     if (done) return;
     done = true;
     boot.classList.add('fade-out');
-    setTimeout(function () { boot.remove(); }, 540);
+    setTimeout(function () {
+      boot.remove();
+      if (window.runS1Bsod) window.runS1Bsod();
+    }, 540);
   }
 
   /* [delay_ms, text, bright] */
